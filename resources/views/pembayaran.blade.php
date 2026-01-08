@@ -38,18 +38,21 @@
                 <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-200 mb-2 text-center">
                     Data Siswa
                 </h2>
-                <p><span class="text-gray-500">Nama :</span> {{ $spp->user->nama ?? 'Tidak diketahui' }}</p>
-                <p><span class="text-gray-500">NIS :</span> {{ $spp->user->nis ?? '-' }}</p>
-                <p><span class="text-gray-500">Kelas :</span> {{ $spp->user->kelas ?? '-' }}</p>
+                <p><span class="text-gray-500">Nama :</span> {{ $tagihan->user->name ?? 'Tidak diketahui' }}</p>
+                <p><span class="text-gray-500">NIS :</span> {{ $tagihan->user->nis ?? '-' }}</p>
+                <p><span class="text-gray-500">Kelas :</span> {{ $tagihan->user->kelas ?? '-' }}</p>
             </div>
 
             <div>
                 <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-200 mb-2 text-center">
                     Informasi Tagihan
                 </h2>
-                <p><span class="text-gray-500">Jenis Tagihan :</span> {{ $spp->bulan ?? 'Tidak diketahui' }}</p>
-                <p><span class="text-gray-500">Tahun :</span> {{ $spp->tahun ?? 'Tidak diketahui' }}</p>
-                <p><span class="text-gray-500">Jatuh Tempo :</span> 10 Mei 2024</p>
+                <p><span class="text-gray-500">Tahun Ajaran :</span> {{ $tagihan->tahun_ajaran ?? 'Tidak diketahui' }}
+                </p>
+                <p><span class="text-gray-500">Jenis Tagihan :</span> {{ $tagihan->jenis_tagihan ?? 'Tidak diketahui' }}
+                </p>
+                <p><span class="text-gray-500">Jatuh Tempo :</span>
+                    {{ \Carbon\Carbon::parse($tagihan->jatuh_tempo)->format('d M Y') }} </p>
             </div>
         </div>
 
@@ -66,16 +69,23 @@
                 <tbody>
                     <tr class="border-t hover:bg-gray-50 transition">
                         <td class="px-4 py-3">
-                            Pembayaran Tagihan UTS {{ $spp->bulan ?? '-' }} {{ $spp->tahun ?? '-' }}
+                            Pembayaran Tagihan UTS Tahun Ajaran {{ $tagihan->tahun_ajaran ?? '-' }}
                         </td>
                         <td class="px-4 py-3 text-right font-semibold text-gray-800">
-                            Rp 10.000
+                            Rp {{ number_format($tagihan->nominal) }}
                         </td>
                         <td class="px-4 py-3 text-center">
-                            <span
-                                class="inline-block px-4 py-1 text-sm font-semibold text-green-700 bg-green-100 rounded-full">
-                                Lunas
-                            </span>
+                            @if ($tagihan->status == 'belum lunas')
+                                <span
+                                    class="inline-block px-4 py-1 text-sm font-semibold text-red-700 bg-gray-100 rounded-full">
+                                    Belum Lunas
+                                </span>
+                            @elseif($tagihan->status == 'lunas')
+                                <span
+                                    class="inline-block px-4 py-1 text-sm font-semibold text-green-700 bg-gray-100 rounded-full">
+                                    Lunas
+                                </span>
+                            @endif
                         </td>
                     </tr>
                 </tbody>
@@ -84,7 +94,7 @@
 
         <!-- ================= FOOTER ================= -->
         <div class="mt-10 text-center text-gray-500 text-xs border-t border-gray-200 pt-4">
-            Terima kasih telah melakukan pembayaran SPP.<br>
+            Terima kasih telah melakukan pembayaran Tagihan.<br>
             Sistem Pembayaran Sekolah &copy; {{ date('Y') }}
         </div>
 

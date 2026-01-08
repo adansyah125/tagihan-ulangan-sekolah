@@ -71,12 +71,12 @@
             </h3>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700">
-                <div class="bg-gray-100 p-4 rounded-lg">👤 <strong>Nama:</strong> Siswa</div>
-                <div class="bg-gray-100 p-4 rounded-lg">🆔 <strong>NIS:</strong> 123456</div>
-                <div class="bg-gray-100 p-4 rounded-lg">🏫 <strong>Kelas:</strong> 5A</div>
-                <div class="bg-gray-100 p-4 rounded-lg">📍 <strong>Alamat:</strong> Bandung</div>
-                <div class="bg-gray-100 p-4 rounded-lg">📧 <strong>Email:</strong> siswa@email.com</div>
-                <div class="bg-gray-100 p-4 rounded-lg">📞 <strong>No. Telp:</strong> 08123456789</div>
+                <div class="bg-gray-100 p-4 rounded-lg">👤 <strong>Nama:</strong> {{ Auth()->user()->name }}</div>
+                <div class="bg-gray-100 p-4 rounded-lg">🆔 <strong>NIS:</strong> {{ Auth()->user()->nis }}</div>
+                <div class="bg-gray-100 p-4 rounded-lg">🏫 <strong>Kelas:</strong> {{ Auth()->user()->kelas }}</div>
+                <div class="bg-gray-100 p-4 rounded-lg">📍 <strong>Alamat:</strong> {{ Auth()->user()->alamat }}</div>
+                <div class="bg-gray-100 p-4 rounded-lg">📧 <strong>Email:</strong> {{ Auth()->user()->email }}</div>
+                <div class="bg-gray-100 p-4 rounded-lg">📞 <strong>No. Telp:</strong> -</div>
             </div>
         </section>
 
@@ -90,7 +90,7 @@
 
             <!-- Filter -->
             <div class="flex flex-col sm:flex-row gap-4 mb-6">
-                <input type="text" placeholder="Cari Bulan"
+                <input type="text" placeholder="Cari Jenis Tagihan"
                     class="flex-1 bg-gray-100 border border-gray-300 rounded-lg p-2">
                 <input type="text" placeholder="Cari Tahun"
                     class="flex-1 bg-gray-100 border border-gray-300 rounded-lg p-2">
@@ -113,22 +113,42 @@
                             <th class="p-3 border">Tanggal</th>
                             <th class="p-3 border">Jatuh Tempo</th>
                             <th class="p-3 border">Status</th>
+                            <th class="p-3 border">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="hover:bg-gray-50">
-                            <td class="p-3 border">1</td>
-                            <td class="p-3 border">2024/2025</td>
-                            <td class="p-3 border">UTS</td>
-                            <td class="p-3 border">Rp 10.000</td>
-                            <td class="p-3 border">10 Mei 2024</td>
-                            <td class="p-3 border">20 Mei 2024</td>
-                            <td class="p-3 border">
-                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
-                                    Lunas
-                                </span>
-                            </td>
-                        </tr>
+                        @forelse ($data as $item)
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 border">{{ $loop->iteration }}</td>
+                                <td class="p-3 border">{{ $item->tahun_ajaran }}</td>
+                                <td class="p-3 border">{{ $item->jenis_tagihan }}</td>
+                                <td class="p-3 border">Rp {{ number_format($item->nominal) }}</td>
+                                <td class="p-3 border">{{ \Carbon\Carbon::parse($item->tgl_tagihan)->format('d M Y') }}
+                                </td>
+                                <td class="p-3 border">{{ \Carbon\Carbon::parse($item->jatuh_tempo)->format('d M Y') }}
+                                </td>
+                                <td class="p-3 border">
+                                    @if ($item->status == 'belum lunas')
+                                        <span
+                                            class="px-3 py-1 bg-gray-100 text-red-700 rounded-full text-xs font-semibold">
+                                            Belum Lunas
+                                        </span>
+                                    @elseif ($item->status == 'lunas')
+                                        <span
+                                            class="px-3 py-1 bg-gray-100 text-green-700 rounded-full text-xs font-semibold">
+                                            Lunas
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="p-3 border">
+                                    <a href="{{ route('payment', $item->id) }}"><span
+                                            class="px-3 py-1 bg-gray-100 text-green-700 rounded-full text-xs font-semibold">
+                                            Bayar
+                                        </span></a>
+                                </td>
+                            </tr>
+                        @empty
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -138,7 +158,7 @@
 
     <!-- ================= FOOTER ================= -->
     <footer class="bg-white border-t border-gray-200 text-center py-6 text-sm text-gray-500">
-        © 2025 <span class="font-semibold text-blue-600">SPP MARHAS</span> | Design By Syahdan Mutahariq
+        © 2025 <span class="font-semibold text-blue-600">SISTEM TAGIHAN SEKOLAH</span> | Design By Syahdan Mutahariq
     </footer>
 
     <!-- ================= SCRIPT ================= -->

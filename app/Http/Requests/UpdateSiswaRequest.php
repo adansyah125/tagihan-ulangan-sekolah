@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateSiswaRequest extends FormRequest
@@ -11,7 +12,7 @@ class UpdateSiswaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,21 @@ class UpdateSiswaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nis' => [
+                'required',
+                'string',
+                Rule::unique('users', 'nis')->ignore($this->route('user')->id),
+            ],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($this->route('user')->id),
+            ],
+            'name' => 'required|string|max:100',
+            'kelas' => 'required|string|max:50',
+            'alamat' => 'nullable|string',
+            'nama_orangtua' => 'nullable|string|max:100',
+            'password' => 'nullable|min:6',
         ];
     }
 }

@@ -22,6 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'nis',
+        'kelas',
+        'alamat',
+        'nama_orangtua',
     ];
 
     /**
@@ -47,8 +51,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function siswas()
+    public function tagihan()
     {
-        return $this->hasMany(Siswa::class);
+        return $this->hasMany(Tagihan::class);
     }
 }

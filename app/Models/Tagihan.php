@@ -9,7 +9,8 @@ class Tagihan extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'siswa_id',
+        'user_id',
+        'tahun_ajaran',
         'jenis_tagihan',
         'nominal',
         'tgl_tagihan',
@@ -17,8 +18,8 @@ class Tagihan extends Model
         'status'
     ];
 
-    public function siswa()
+    public function user()
     {
-        return $this->belongsTo(Siswa::class);
+        return $this->belongsTo(User::class);
     }
 }

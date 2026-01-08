@@ -22,7 +22,7 @@
                     stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
-                Buka Tagihan
+                Buat Tagihan
             </button>
         </div>
 
@@ -33,27 +33,33 @@
                     <tr>
                         <th class="px-6 py-3 text-left">Tahun Ajaran</th>
                         <th class="px-6 py-3 text-left">Nominal</th>
+                        <th class="px-6 py-3 text-left">Tanggal Mulai</th>
                         <th class="px-6 py-3 text-left">Jatuh Tempo</th>
-                        <th class="px-6 py-3 text-center">Status</th>
+                        {{-- <th class="px-6 py-3 text-center">Status</th> --}}
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-700">
-                    <tr class="hover:bg-gray-800 transition">
-                        <td class="px-6 py-3">2024 / 2025</td>
-                        <td class="px-6 py-3 font-semibold text-white">Rp 150.000</td>
-                        <td class="px-6 py-3">10 Oktober 2024</td>
-                        <td class="px-6 py-3 text-center">
-                            <span class="px-3 py-1 rounded-full text-xs bg-emerald-600/20 text-emerald-400">
-                                Aktif
-                            </span>
-                        </td>
-                        <td class="px-6 py-3 text-center">
-                            <button class="bg-rose-600 hover:bg-rose-500 px-3 py-1 rounded-lg text-white text-xs">
-                                Tutup
-                            </button>
-                        </td>
-                    </tr>
+                    @forelse ($data as $item)
+                        <tr class="hover:bg-gray-800 transition">
+                            <td class="px-6 py-3">{{ $item->jenis_tagihan }} {{ $item->tahun_ajaran }}</td>
+                            <td class="px-6 py-3 font-semibold text-white">Rp {{ number_format($item->nominal) }}</td>
+                            <td class="px-6 py-3">{{ \Carbon\Carbon::parse($item->tgl_tagihan)->format('d M Y') }}</td>
+                            <td class="px-6 py-3">{{ \Carbon\Carbon::parse($item->jatuh_tempo)->format('d M Y') }}</td>
+                            {{-- <td class="px-6 py-3 text-center">
+                                <span class="px-3 py-1 rounded-full text-xs bg-emerald-600/20 text-emerald-400">
+                                    Aktif
+                                </span>
+                            </td> --}}
+                            <td class="px-6 py-3 text-center">
+                                <button class="bg-rose-600 hover:bg-rose-500 px-3 py-1 rounded-lg text-white text-xs">
+                                    Hapus
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <td class="px-6 py-3 text-center" colspan="5">Tidak ada data</td>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -86,26 +92,31 @@
                 <button onclick="closeModal()" class="text-gray-400 hover:text-red-400">✕</button>
             </div>
 
-            <form class="p-6 space-y-4">
+            <form class="p-6 space-y-4" action="{{ route('admin.tagihan.uas.store') }}" method="POST">
                 @csrf
-
                 <div>
                     <label class="text-sm text-gray-400">Tahun Ajaran</label>
-                    <input type="text"
+                    <input type="text" name="tahun_ajaran"
                         class="w-full mt-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white
                     focus:ring-2 focus:ring-indigo-500">
                 </div>
 
                 <div>
                     <label class="text-sm text-gray-400">Nominal</label>
-                    <input type="number"
+                    <input type="number" name="nominal"
                         class="w-full mt-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white
                     focus:ring-2 focus:ring-indigo-500">
                 </div>
 
                 <div>
+                    <label class="text-sm text-gray-400">Tanggal Mulai</label>
+                    <input type="date" name="tgl_tagihan"
+                        class="w-full mt-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white
+                    focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
                     <label class="text-sm text-gray-400">Jatuh Tempo</label>
-                    <input type="date"
+                    <input type="date" name="jatuh_tempo"
                         class="w-full mt-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white
                     focus:ring-2 focus:ring-indigo-500">
                 </div>

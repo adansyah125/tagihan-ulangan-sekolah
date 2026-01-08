@@ -11,18 +11,28 @@ class StoreSiswaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+
     public function rules(): array
     {
         return [
-            //
+            'nis'           => 'required|string|unique:users,nis',
+            'email'         => 'required|email|unique:users,email',
+            'nama'          => 'required|string|max:255',
+            'kelas'         => 'required|string|max:50',
+            'alamat'        => 'nullable|string',
+            'nama_orangtua' => 'nullable|string|max:255',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nis.required'   => 'NIS wajib diisi',
+            'nis.unique'     => 'NIS sudah terdaftar',
+            'email.unique'   => 'Email sudah terdaftar',
         ];
     }
 }

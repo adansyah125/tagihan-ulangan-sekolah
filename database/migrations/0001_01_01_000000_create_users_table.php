@@ -18,6 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['staf', 'siswa'])->default('staf');
+            $table->integer('nis')->nullable();
+            $table->string('kelas')->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('nama_orangtua')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

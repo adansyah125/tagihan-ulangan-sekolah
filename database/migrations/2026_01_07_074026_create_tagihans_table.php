@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('tagihans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswas')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->enum('jenis_tagihan', ['uts', 'uas'])->default('uts');
             $table->decimal('nominal', 10, 2);
+            $table->string('tahun_ajaran');
             $table->date('tgl_tagihan');
             $table->date('jatuh_tempo');
             $table->enum('status', ['belum lunas', 'lunas'])->default('belum lunas');

@@ -11,7 +11,7 @@ class StoreTagihanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreTagihanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'tahun_ajaran' => 'required|string|max:20',
+            'nominal' => 'required|numeric|min:0',
+            'tgl_tagihan' => 'required|date',
+            'jatuh_tempo' => 'required|date|after_or_equal:tgl_tagihan',
         ];
     }
 }

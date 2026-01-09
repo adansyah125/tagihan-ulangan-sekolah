@@ -19,7 +19,6 @@ class TagihanController extends Controller
             'nominal',
             'tgl_tagihan',
             'jatuh_tempo',
-            'status'
         )
             ->where('jenis_tagihan', 'uts')
             ->groupBy(
@@ -28,7 +27,6 @@ class TagihanController extends Controller
                 'nominal',
                 'tgl_tagihan',
                 'jatuh_tempo',
-                'status'
             )
             ->orderBy('tahun_ajaran', 'desc')
             ->get();
@@ -43,7 +41,6 @@ class TagihanController extends Controller
             'nominal',
             'tgl_tagihan',
             'jatuh_tempo',
-            'status'
         )
             ->where('jenis_tagihan', 'uas')
             ->groupBy(
@@ -52,7 +49,6 @@ class TagihanController extends Controller
                 'nominal',
                 'tgl_tagihan',
                 'jatuh_tempo',
-                'status'
             )
             ->orderBy('tahun_ajaran', 'desc')
             ->get();

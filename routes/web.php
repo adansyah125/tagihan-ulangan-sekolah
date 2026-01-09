@@ -21,7 +21,9 @@ Route::post('/logout/staf', [AuthController::class, 'logoutStaf'])->name('logout
 
 Route::middleware(['auth', 'siswa'])->group(function () {
     Route::get('/dashboard', [SiswaDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/payment/{tagihan}', [PaymentController::class, 'show'])->name('payment');
+    Route::get('/payment/{kd_tagihan}', [PaymentController::class, 'show'])->name('payment');
+    Route::post('payment/detail/{kd_tagihan}/bayar', [PaymentController::class, 'bayar'])->name('detail.bayar');
+    Route::post('/payment/{kd_tagihan}/lunas', [PaymentController::class, 'markAsLunas'])->name('spp.markAsLunas');
 });
 
 Route::middleware(['auth', 'staf'])->group(function () {

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Tagihan;
+use App\Models\TagihanDetail;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -31,11 +32,21 @@ class TagihanService
                     'Tagihan UTS untuk tahun ajaran ini sudah dibuka.'
                 );
             }
+            Tagihan::create([
+                'jenis_tagihan' => 'uts',
+                'nominal' => $data['nominal'],
+                'tahun_ajaran' => $data['tahun_ajaran'],
+                'tgl_tagihan' => $data['tgl_tagihan'],
+                'jatuh_tempo' => $data['jatuh_tempo'],
+            ]);
 
             // 🧾 Buat tagihan untuk setiap siswa
             foreach ($siswas as $siswa) {
-                Tagihan::create([
+                $tagihan = Tagihan::where('jenis_tagihan', 'uts')->select('id')->first();
+                TagihanDetail::create([
                     'user_id' => $siswa->id, // siswa penerima tagihan
+                    'tagihan_id' => $tagihan->id,
+                    'kd_tagihan'  => str()->random(12),
                     'jenis_tagihan' => 'uts',
                     'nominal' => $data['nominal'],
                     'tahun_ajaran' => $data['tahun_ajaran'],
@@ -70,11 +81,21 @@ class TagihanService
                     'Tagihan UAS untuk tahun ajaran ini sudah dibuka.'
                 );
             }
+            Tagihan::create([
+                'jenis_tagihan' => 'uas',
+                'nominal' => $data['nominal'],
+                'tahun_ajaran' => $data['tahun_ajaran'],
+                'tgl_tagihan' => $data['tgl_tagihan'],
+                'jatuh_tempo' => $data['jatuh_tempo'],
+            ]);
 
             // 🧾 Buat tagihan untuk setiap siswa
             foreach ($siswas as $siswa) {
-                Tagihan::create([
+                $tagihan = Tagihan::where('jenis_tagihan', 'uas')->select('id')->first();
+                TagihanDetail::create([
                     'user_id' => $siswa->id, // siswa penerima tagihan
+                    'tagihan_id' => $tagihan->id,
+                    'kd_tagihan'  => str()->random(12),
                     'jenis_tagihan' => 'uas',
                     'nominal' => $data['nominal'],
                     'tahun_ajaran' => $data['tahun_ajaran'],

@@ -5,17 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tagihan extends Model
+class TagihanDetail extends Model
 {
+    /** @use HasFactory<\Database\Factories\TagihanDetailFactory> */
     use HasFactory;
     protected $fillable = [
-        'tahun_ajaran',
-        'jenis_tagihan',
+        'user_id',
+        'tagihan_id',
         'nominal',
+        'jenis_tagihan',
+        'status',
         'tgl_tagihan',
         'jatuh_tempo',
-        'status'
+        'kd_tagihan'
     ];
+
+    public function tagihan()
+    {
+        return $this->belongsTo(Tagihan::class);
+    }
 
     public function user()
     {

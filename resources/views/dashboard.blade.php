@@ -120,7 +120,7 @@
                         @forelse ($data as $item)
                             <tr class="hover:bg-gray-50">
                                 <td class="p-3 border">{{ $loop->iteration }}</td>
-                                <td class="p-3 border">{{ $item->tahun_ajaran }}</td>
+                                <td class="p-3 border">{{ $item->tagihan->tahun_ajaran }}</td>
                                 <td class="p-3 border">{{ $item->jenis_tagihan }}</td>
                                 <td class="p-3 border">Rp {{ number_format($item->nominal) }}</td>
                                 <td class="p-3 border">{{ \Carbon\Carbon::parse($item->tgl_tagihan)->format('d M Y') }}
@@ -133,21 +133,27 @@
                                             class="px-3 py-1 bg-gray-100 text-red-700 rounded-full text-xs font-semibold">
                                             Belum Lunas
                                         </span>
-                                    @elseif ($item->status == 'lunas')
-                                        <span
-                                            class="px-3 py-1 bg-gray-100 text-green-700 rounded-full text-xs font-semibold">
-                                            Lunas
-                                        </span>
-                                    @endif
-                                </td>
                                 <td class="p-3 border">
-                                    <a href="{{ route('payment', $item->id) }}"><span
+                                    <a href="{{ route('payment', $item->kd_tagihan) }}"><span
                                             class="px-3 py-1 bg-gray-100 text-green-700 rounded-full text-xs font-semibold">
                                             Bayar
                                         </span></a>
                                 </td>
-                            </tr>
-                        @empty
+                            @elseif ($item->status == 'lunas')
+                                <span class="px-3 py-1 bg-gray-100 text-green-700 rounded-full text-xs font-semibold">
+                                    Lunas
+                                </span>
+                                <td class="p-3 border">
+                                    <a href="{{ route('payment', $item->kd_tagihan) }}"><span
+                                            class="px-3 py-1 bg-gray-100 text-green-700 rounded-full text-xs font-semibold">
+                                            Cetak
+                                        </span></a>
+                                </td>
+                        @endif
+                        </td>
+
+                        </tr>
+                    @empty
                         @endforelse
                     </tbody>
                 </table>

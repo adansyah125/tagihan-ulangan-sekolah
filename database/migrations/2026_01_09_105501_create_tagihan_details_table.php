@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tagihans', function (Blueprint $table) {
+        Schema::create('tagihan_details', function (Blueprint $table) {
             $table->id();
-            $table->enum('jenis_tagihan', ['uts', 'uas'])->default('uts');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('tagihan_id')->constrained('tagihans')->cascadeOnDelete();
+            $table->string('kd_tagihan');
             $table->decimal('nominal', 10, 2);
-            $table->string('tahun_ajaran');
+            $table->enum('jenis_tagihan', ['uts', 'uas'])->default('uts');
             $table->date('tgl_tagihan');
             $table->date('jatuh_tempo');
+            $table->enum('status', ['belum lunas', 'lunas'])->default('belum lunas');
+
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tagihans');
+        Schema::dropIfExists('tagihan_details');
     }
 };

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Pembayaran SPP</title>
     <link rel="icon" type="image/png" href="{{ asset('marhas.jpg') }}" />
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -23,7 +22,7 @@
                 </h1>
                 <p class="text-sm text-gray-500 mt-1">
                     Nomor Invoice:
-                    <span class="text-blue-600 font-semibold">#SPP645612635612</span>
+                    <span class="text-blue-600 font-semibold">#{{ $tagihan->kd_tagihan }}</span>
                 </p>
             </div>
             <div class="mt-4 md:mt-0 text-center md:text-right">
@@ -47,7 +46,8 @@
                 <h2 class="text-lg font-semibold text-gray-800 border-b border-gray-200 mb-2 text-center">
                     Informasi Tagihan
                 </h2>
-                <p><span class="text-gray-500">Tahun Ajaran :</span> {{ $tagihan->tahun_ajaran ?? 'Tidak diketahui' }}
+                <p><span class="text-gray-500">Tahun Ajaran :</span>
+                    {{ $tagihan->tagihan->tahun_ajaran ?? 'Tidak diketahui' }}
                 </p>
                 <p><span class="text-gray-500">Jenis Tagihan :</span> {{ $tagihan->jenis_tagihan ?? 'Tidak diketahui' }}
                 </p>
@@ -90,6 +90,111 @@
                     </tr>
                 </tbody>
             </table>
+            {{-- Total & Tombol Bayar --}}
+            <div
+                class="flex
+                                flex-col md:flex-row justify-between items-center border-t border-blue-400/30 pt-4">
+                <div class="text-lg font-semibold text-gray-300 mb-4 md:mb-0">
+                    Total Pembayaran:
+                    <span class="text-blue-400 ml-2">Rp
+                        {{ number_format($tagihan->nominal, 0, ',', '.') }}</span>
+                </div>
+
+                @if ($tagihan->status !== 'lunas')
+                    <div class="mt-8 text-center">
+                        <button id="pay-button"
+                            class="cursor-pointer px-6 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-xl font-semibold shadow-lg  transition-all duration-200">
+                            💳 Bayar Sekarang
+                        </button>
+                    </div>
+                    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+                        data-client-key="{{ config('midtrans.client_key') }}"></script>
+
+                    <script>
+                        document.getElementById('pay-button').onclick = function() {
+                            fetch("{{ route('detail.bayar', $tagihan->kd_tagihan) }}", {
+                                    method: "POST",
+                                    headers: {
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                        "Content-Type": "application/json",
+                                        "Accept": "application/json"
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (!data.snapToken) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Gagal Membuat Transaksi',
+                                            text: data.error || 'Token pembayaran tidak ditemukan.',
+                                            confirmButtonColor: '#3085d6',
+                                        });
+                                        return;
+                                    }
+
+                                    snap.pay(data.snapToken, {
+                                        onSuccess: function(result) {
+                                            fetch("/payment/{{ $tagihan->kd_tagihan }}/lunas", {
+                                                method: "POST",
+                                                headers: {
+                                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                                }
+                                            }).then(() => {
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Pembayaran Berhasil!',
+                                                    text: 'Status tagihan sudah menjadi Lunas ✅',
+                                                    confirmButtonColor: '#3085d6',
+                                                }).then(() => {
+                                                    window.location.href = "/dashboard";
+                                                });
+                                            });
+                                        },
+                                        onPending: function(result) {
+                                            Swal.fire({
+                                                icon: 'info',
+                                                title: 'Menunggu Pembayaran',
+                                                text: 'Silakan selesaikan pembayaranmu untuk melanjutkan.',
+                                                confirmButtonColor: '#3085d6',
+                                            });
+                                        },
+                                        onError: function(result) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Gagal Membayar',
+                                                text: 'Terjadi kesalahan saat memproses pembayaran ❌',
+                                                confirmButtonColor: '#d33',
+                                            });
+                                        },
+                                        onClose: function() {
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Pembayaran Dibatalkan',
+                                                text: 'Kamu menutup pembayaran. Silakan coba lagi.',
+                                                confirmButtonColor: '#3085d6',
+                                            }).then(() => {
+                                                window.location.href = "/dashboard";
+                                            });
+                                        }
+                                    });
+                                })
+                                .catch(error => {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Terjadi Kesalahan',
+                                        text: error.message,
+                                        confirmButtonColor: '#d33',
+                                    });
+                                });
+                        };
+                    </script>
+                @elseif($tagihan->status === 'lunas')
+                    <a href="{{ route('dashboard') }}"
+                        class="cursor-pointer px-6 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-xl font-semibold shadow-lg  transition-all duration-200">
+                        Kembali
+                    </a>
+                @endif
+            </div>
         </div>
 
         <!-- ================= FOOTER ================= -->

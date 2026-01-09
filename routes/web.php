@@ -30,9 +30,9 @@ Route::middleware(['auth', 'staf'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('admin.siswa');
     Route::get('/admin/siswa/{user}', [SiswaController::class, 'show'])->name('admin.siswa.show');
-    Route::post('/admin/siswa', [SiswaController::class, 'store'])->name('admin.siswa.store');
+    Route::post('/admin/siswa/store', [SiswaController::class, 'store'])->name('admin.siswa.store');
     Route::put('/admin/siswa/{user}', [SiswaController::class, 'update'])->name('admin.siswa.update');
-    Route::delete('/admin/siswa/{user}', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
+    Route::delete('/admin/siswa/{user}/delete', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
     Route::get('/admin/tagihan/uts', [TagihanController::class, 'indexUTS'])->name('admin.tagihan.uts');
     Route::post('/admin/tagihan/uts', [TagihanController::class, 'storeUTS'])->name('admin.tagihan.uts.store');
     Route::get('/admin/tagihan/uas', [TagihanController::class, 'indexUAS'])->name('admin.tagihan.uas');

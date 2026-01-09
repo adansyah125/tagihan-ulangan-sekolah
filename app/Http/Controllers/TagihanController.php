@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Tagihan;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\TagihanDetail;
 use App\Services\TagihanService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreTagihanRequest;
@@ -19,14 +21,16 @@ class TagihanController extends Controller
             'nominal',
             'tgl_tagihan',
             'jatuh_tempo',
+            'status'
         )
-            ->where('jenis_tagihan', 'uts')
+            ->where('jenis_tagihan', 'UTS')
             ->groupBy(
                 'jenis_tagihan',
                 'tahun_ajaran',
                 'nominal',
                 'tgl_tagihan',
                 'jatuh_tempo',
+                'status'
             )
             ->orderBy('tahun_ajaran', 'desc')
             ->get();
@@ -41,8 +45,9 @@ class TagihanController extends Controller
             'nominal',
             'tgl_tagihan',
             'jatuh_tempo',
+
         )
-            ->where('jenis_tagihan', 'uas')
+            ->where('jenis_tagihan', 'UAS')
             ->groupBy(
                 'jenis_tagihan',
                 'tahun_ajaran',
@@ -62,7 +67,7 @@ class TagihanController extends Controller
 
             return back()->with(
                 'success',
-                'Tagihan UTS berhasil dibuka & dikirim ke seluruh siswa'
+                'Tagihan UTS berhasil dibuat'
             );
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());

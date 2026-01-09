@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('tagihans', function (Blueprint $table) {
             $table->id();
-            $table->enum('jenis_tagihan', ['uts', 'uas'])->default('uts');
+            $table->enum('jenis_tagihan', ['UTS', 'UAS'])->default('UTS');
             $table->decimal('nominal', 10, 2);
             $table->string('tahun_ajaran');
             $table->date('tgl_tagihan');
             $table->date('jatuh_tempo');
+            $table->enum('status', ['Buka', 'Tutup'])->default('Buka');
             $table->timestamps();
         });
     }

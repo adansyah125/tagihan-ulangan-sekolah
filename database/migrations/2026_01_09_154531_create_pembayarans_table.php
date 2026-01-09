@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('pembayarans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tagihan_id')->constrained('tagihans')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('tagihan_id')->constrained('tagihan_details')->cascadeOnDelete();
+            $table->string('kd_pembayaran');
+            $table->enum('jenis_tagihan', ['UTS', 'UAS'])->default('UTS');
             $table->date('tgl_bayar');
             $table->decimal('jumlah_bayar', 10, 2);
             $table->enum('status_pembayaran', ['belum lunas', 'lunas'])->default('belum lunas');

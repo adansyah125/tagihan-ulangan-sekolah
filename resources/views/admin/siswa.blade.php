@@ -75,7 +75,7 @@
                             </td>
                         </tr>
                     @empty
-                        <td class="px-6 py-3" colspan="7">Tidak ada data</td>
+                        <td colspan="7" class="px-3 py-4 text-center">Tidak ada data</td>
                     @endforelse
                 </tbody>
             </table>
@@ -100,10 +100,7 @@
                     text-gray-100 text-xs">
                         Edit
                     </button>
-                    <form action="{{ route('admin.siswa.destroy', $item->id) }}" method="POST"
-                        onsubmit="return confirm('Yakin mau hapus data ini?')">
-                        @csrf
-                        @method('DELETE')
+                    <form>
                         <button
                             class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg
                     text-gray-100 text-xs cursor-pointer">

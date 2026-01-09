@@ -15,7 +15,7 @@
                 Laporan Tagihan Siswa
             </h2>
             <p class="text-sm text-gray-400 mt-1">
-                Rekap siswa yang sudah lunas & belum lunas (UTS / UAS)
+                Rekap siswa yang belum lunas (UTS / UAS)
             </p>
         </div>
 
@@ -23,15 +23,15 @@
         <div class="grid md:grid-cols-3 gap-6">
             <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700">
                 <p class="text-sm text-gray-400">Total Tagihan</p>
-                <h3 class="text-2xl font-bold text-indigo-400">Rp 12.000.000</h3>
+                <h3 class="text-2xl font-bold text-indigo-400">Rp {{ number_format($totalbelumLunas) }}</h3>
             </div>
             <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700">
                 <p class="text-sm text-gray-400">Sudah Lunas</p>
-                <h3 class="text-2xl font-bold text-emerald-400">48 Siswa</h3>
+                <h3 class="text-2xl font-bold text-emerald-400">{{ $Lunas }} Siswa</h3>
             </div>
             <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700">
                 <p class="text-sm text-gray-400">Belum Lunas</p>
-                <h3 class="text-2xl font-bold text-rose-400">12 Siswa</h3>
+                <h3 class="text-2xl font-bold text-rose-400">{{ $BelumLunas }} Siswa</h3>
             </div>
         </div>
 
@@ -72,42 +72,33 @@
                     </thead>
                     <tbody class="divide-y divide-gray-700">
                         {{-- BELUM LUNAS --}}
-                        <tr class="hover:bg-gray-800 transition">
-                            <td class="px-6 py-3 font-semibold text-white">Ahmad</td>
-                            <td class="px-6 py-3">J 2023</td>
-                            <td class="px-6 py-3">UAS</td>
-                            <td class="px-6 py-3 text-right">Rp 200.000</td>
-                            <td class="px-6 py-3 text-center">
-                                <span class="px-3 py-1 rounded-full text-xs bg-rose-600/20 text-rose-400">
-                                    Belum Lunas
-                                </span>
-                            </td>
-                            <td class="px-6 py-3 text-center">
-                                <a href="#"
-                                    class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded-lg text-white text-xs">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h11M9 21l-6-6 6-6" />
-                                    </svg>
-                                    Kirim Pesan
-                                </a>
-                            </td>
-                        </tr>
-
-                        {{-- LUNAS --}}
-                        <tr class="hover:bg-gray-800 transition">
-                            <td class="px-6 py-3 font-semibold text-white">Syahdan</td>
-                            <td class="px-6 py-3">J 2023</td>
-                            <td class="px-6 py-3">UTS</td>
-                            <td class="px-6 py-3 text-right">Rp 150.000</td>
-                            <td class="px-6 py-3 text-center">
-                                <span class="px-3 py-1 rounded-full text-xs bg-emerald-600/20 text-emerald-400">
-                                    Lunas
-                                </span>
-                            </td>
-                            <td class="px-6 py-3 text-center">
-                                <span class="text-xs text-gray-500 italic">-</span>
-                            </td>
+                        @forelse ($data as $item)
+                            <tr class="hover:bg-gray-800 transition">
+                                <td class="px-6 py-3 font-semibold text-white">{{ $item->user->name }}</td>
+                                <td class="px-6 py-3">{{ $item->user->kelas }}</td>
+                                <td class="px-6 py-3">{{ $item->jenis_tagihan }}</td>
+                                <td class="px-6 py-3 text-right">Rp {{ number_format($item->nominal) }}</td>
+                                <td class="px-6 py-3 text-center">
+                                    @if ($item->status == 'belum lunas')
+                                        <span class="px-3 py-1 rounded-full text-xs bg-rose-600/20 text-rose-400">
+                                            Belum Lunas
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-3 text-center">
+                                    <a href="#"
+                                        class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded-lg text-white text-xs">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3 10h11M9 21l-6-6 6-6" />
+                                        </svg>
+                                        Kirim Pesan
+                                    </a>
+                                </td>
+                            @empty
+                                <td class="px-6 py-3 text-center" colspan="6">Tidak ada data</td>
+                        @endforelse
                         </tr>
                     </tbody>
                 </table>

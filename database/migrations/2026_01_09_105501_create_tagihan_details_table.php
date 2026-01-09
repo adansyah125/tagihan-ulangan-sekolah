@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('tagihan_id')->constrained('tagihans')->cascadeOnDelete();
             $table->string('kd_tagihan');
             $table->decimal('nominal', 10, 2);
-            $table->enum('jenis_tagihan', ['uts', 'uas'])->default('uts');
+            $table->enum('jenis_tagihan', ['UTS', 'UAS'])->default('UTS');
             $table->date('tgl_tagihan');
             $table->date('jatuh_tempo');
             $table->enum('status', ['belum lunas', 'lunas'])->default('belum lunas');

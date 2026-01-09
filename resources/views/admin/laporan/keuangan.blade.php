@@ -16,27 +16,28 @@
                 Laporan Keuangan UTS & UAS
             </h2>
             <p class="text-sm text-gray-400 mt-1">
-                Rekap pembayaran tagihan siswa berdasarkan jenis ujian
+                Rekap transaksi pembayaran tagihan siswa ( UTS / UAS )
             </p>
         </div>
 
         {{-- RINGKASAN --}}
         <div class="grid md:grid-cols-4 gap-6">
             <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700">
-                <p class="text-sm text-gray-400">Total Tagihan</p>
-                <h3 class="text-2xl font-bold text-indigo-400">Rp 12.000.000</h3>
+                <p class="text-sm text-gray-400">Total Pendapatan</p>
+                <h3 class="text-2xl font-bold text-emerald-400">Rp {{ number_format($totalPendapatan) }}</h3>
             </div>
             <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700">
-                <p class="text-sm text-gray-400">Total Dibayar</p>
-                <h3 class="text-2xl font-bold text-emerald-400">Rp 9.500.000</h3>
+                <p class="text-sm text-gray-400">Total Tagihan</p>
+                <h3 class="text-2xl font-bold text-indigo-400">Rp {{ number_format($totalLunas) }}</h3>
             </div>
+
             <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700">
                 <p class="text-sm text-gray-400">Sisa Tagihan</p>
-                <h3 class="text-2xl font-bold text-rose-400">Rp 2.500.000</h3>
+                <h3 class="text-2xl font-bold text-rose-400">Rp {{ number_format($totalbelumLunas) }}</h3>
             </div>
             <div class="bg-gray-800 rounded-2xl p-5 border border-gray-700">
                 <p class="text-sm text-gray-400">Jumlah Transaksi</p>
-                <h3 class="text-2xl font-bold text-yellow-400">76</h3>
+                <h3 class="text-2xl font-bold text-yellow-400">{{ $siswaLunas }}</h3>
             </div>
         </div>
 
@@ -67,37 +68,43 @@
             <div class="overflow-x-auto rounded-xl border border-gray-700">
                 <table class="min-w-full text-sm text-gray-300">
                     <thead class="bg-gray-800 text-indigo-400 uppercase text-xs">
-                        <tr>
-                            <th class="px-6 py-3 text-left">Tanggal</th>
-                            <th class="px-6 py-3 text-left">Nama Siswa</th>
-                            <th class="px-6 py-3 text-left">Jenis</th>
-                            <th class="px-6 py-3 text-right">Nominal</th>
-                            <th class="px-6 py-3 text-center">Status</th>
+                        <tr class="text-center">
+                            <th class="px-6 py-3">Tanggal Bayar</th>
+                            <th class="px-6 py-3">Kode Transaksi</th>
+                            <th class="px-6 py-3">Nama Siswa</th>
+                            <th class="px-6 py-3">Jenis</th>
+                            <th class="px-6 py-3">Nominal</th>
+                            <th class="px-6 py-3">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
-                        <tr class="hover:bg-gray-800 transition">
-                            <td class="px-6 py-3">10-10-2024</td>
-                            <td class="px-6 py-3 text-white font-semibold">Syahdan</td>
-                            <td class="px-6 py-3">UTS</td>
-                            <td class="px-6 py-3 text-right">Rp 150.000</td>
-                            <td class="px-6 py-3 text-center">
-                                <span class="px-3 py-1 rounded-full text-xs bg-emerald-600/20 text-emerald-400">
-                                    Lunas
-                                </span>
+                        @forelse ($data as $item)
+                            <tr class="hover:bg-gray-800 transition text-center">
+                                <td class="px-6 py-3">
+                                    {{ \Carbon\Carbon::parse($item->tgl_bayar)->format('d M Y') }}</td>
+                                <td class="px-6 py-3 text-white font-semibold">{{ $item->tagihan->kd_tagihan }}</td>
+                                <td class="px-6 py-3 text-white font-semibold">{{ $item->user->nama ?? '-' }}
+                                </td>
+                                <td class="px-6 py-3">{{ $item->tagihan->jenis_tagihan }}</td>
+                                <td class="px-6 py-3">Rp {{ number_format($item->jumlah_bayar) }}</td>
+                                <td class="px-6 py-3 text-center flex gap-2 items-center justify-center">
+                                    <span class="px-3 py-1 rounded-full text-xs bg-emerald-600/20 text-emerald-400">
+                                        Lunas
+                                    </span>
+
+                                    <span class="px-3 py-1 rounded-full text-xs bg-red-600/20 text-red-400">
+                                        <a href="{{ route('admin.laporan.keuangan') }}"> Cetak Struk
+                                        </a>
+                                    </span>
+                                </td>
+                            </tr>
+                        @empty
+                            <td class="px-6 py-3 text-center" colspan="6">
+                                Tidak ada data
                             </td>
-                        </tr>
-                        <tr class="hover:bg-gray-800 transition">
-                            <td class="px-6 py-3">12-11-2024</td>
-                            <td class="px-6 py-3 text-white font-semibold">Ahmad</td>
-                            <td class="px-6 py-3">UAS</td>
-                            <td class="px-6 py-3 text-right">Rp 200.000</td>
-                            <td class="px-6 py-3 text-center">
-                                <span class="px-3 py-1 rounded-full text-xs bg-rose-600/20 text-rose-400">
-                                    Belum
-                                </span>
-                            </td>
-                        </tr>
+                        @endforelse
+
+
                     </tbody>
                 </table>
             </div>

@@ -15,10 +15,10 @@ class SiswaService
             'nis'           => $data['nis'],
             'name'          => $data['nama'],
             'email'         => $data['email'],
-            'kelas'         => $data['kelas'],
+            'kelas_id'      => $data['kelas_id'],
             'alamat'        => $data['alamat'] ?? null,
             'nama_orangtua' => $data['nama_orangtua'] ?? null,
-            'password'      => Hash::make($data['nis']), // bisa reset nanti
+            'password'      => Hash::make($data['nis']),
             'role'          => 'siswa',
             'remember_token' => Str::random(10),
         ]);
@@ -31,7 +31,7 @@ class SiswaService
             'nis' => $data['nis'],
             'email' => $data['email'],
             'name' => $data['name'],
-            'kelas' => $data['kelas'],
+            'kelas_id' => $data['kelas_id'],
             'alamat' => $data['alamat'] ?? null,
             'nama_orangtua' => $data['nama_orangtua'] ?? null,
         ]);

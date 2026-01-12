@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Pembayaran</title>
-    <link rel="icon" type="image/png" href="{{ asset('marhas.jpg') }}" />
+    <link rel="icon" type="image/jpg" href="{{ asset('dharma_agung.jpg') }}" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -39,7 +39,7 @@
                 </h2>
                 <p><span class="text-gray-500">Nama :</span> {{ $tagihan->user->name ?? 'Tidak diketahui' }}</p>
                 <p><span class="text-gray-500">NIS :</span> {{ $tagihan->user->nis ?? '-' }}</p>
-                <p><span class="text-gray-500">Kelas :</span> {{ $tagihan->user->kelas ?? '-' }}</p>
+                <p><span class="text-gray-500">Kelas :</span> {{ $tagihan->kelas->kelas ?? '-' }}</p>
             </div>
 
             <div>

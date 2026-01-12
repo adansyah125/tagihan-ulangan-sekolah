@@ -34,7 +34,7 @@ class UpdateSiswaRequest extends FormRequest
                 Rule::unique('users', 'email')->ignore($this->route('user')->id),
             ],
             'name' => 'required|string|max:100',
-            'kelas' => 'required|string|max:50',
+            'kelas_id' => 'required',
             'alamat' => 'nullable|string',
             'nama_orangtua' => 'nullable|string|max:100',
             'password' => 'nullable|min:6',

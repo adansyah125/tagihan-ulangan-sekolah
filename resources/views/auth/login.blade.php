@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=2">
+    <link rel="icon" type="image/jpg" href="{{ asset('dharma_agung.jpg') }}?v=2">
     <title>SISTEM TAGIHAN ULANGAN</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -21,10 +21,11 @@
         <!-- Logo -->
         <div class="flex flex-col items-center">
             <div class="flex gap-1 mb-1">
-                <div class="bg-green-500 w-6 h-6 rounded-sm"></div>
-                <div class="bg-zinc-500 mt-2 w-6 h-6 rounded-sm -ml-2"></div>
+                {{-- <div class="bg-green-500 w-6 h-6 rounded-sm"></div>
+                <div class="bg-zinc-500 mt-2 w-6 h-6 rounded-sm -ml-2"></div> --}}
+                <img src="{{ asset('dharma_agung.jpg') }}" class=" h-25" alt="">
             </div>
-            <span class="text-xl font-bold text-blue-900">SISTEM TAGIHAN SEKOLAH</span>
+            <span class="text-md font-bold text-red-700">SISTEM TAGIHAN SEKOLAH DHARMA AGUNG</span>
         </div>
 
         <!-- Judul -->

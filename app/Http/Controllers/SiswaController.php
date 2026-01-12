@@ -7,13 +7,15 @@ use Illuminate\Http\Request;
 use App\Services\SiswaService;
 use App\Http\Requests\StoreSiswaRequest;
 use App\Http\Requests\UpdateSiswaRequest;
+use App\Models\Kelas;
 
 class SiswaController extends Controller
 {
     public function index()
     {
         $data = User::latest()->where('role', 'siswa')->get();
-        return view('admin.siswa', compact('data'));
+        $kelas = Kelas::all();
+        return view('admin.siswa', compact('data', 'kelas'));
     }
 
     public function store(StoreSiswaRequest $request, SiswaService $service)
@@ -25,7 +27,8 @@ class SiswaController extends Controller
 
     public function show(User $user)
     {
-        return view('admin.show-siswa', compact('user'));
+        $kelas = Kelas::all();
+        return view('admin.show-siswa', compact('user', 'kelas'));
     }
 
     public function update(UpdateSiswaRequest $request, User $user, SiswaService $siswaService)

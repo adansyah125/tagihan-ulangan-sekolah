@@ -10,12 +10,19 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+
     public function index()
     {
-        $data = TagihanDetail::where('user_id', Auth::id())
-            ->oldest('status')
-            ->orderBy('jatuh_tempo')
+        $data = TagihanDetail::with('tagihan')
+            ->where('user_id', auth::id())
+            ->latest()
             ->get();
-        return view('dashboard', compact('data'));
+        $payment = TagihanDetail::with('tagihan')
+            ->where('user_id', auth::id())
+            ->where('status', 'belum lunas')
+            ->latest()
+            ->take(3)
+            ->get();
+        return view('dashboard', compact('data', 'payment'));
     }
 }

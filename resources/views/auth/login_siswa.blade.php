@@ -40,10 +40,11 @@
 
             <div class="text-center mb-10">
                 <div class="flex justify-center mb-2">
-                    <div class="bg-green-400 w-4 h-4 rounded-sm"></div>
-                    <div class="bg-zinc-400 mt-2 w-4 h-4 rounded-sm -ml-2"></div>
+                    {{-- <div class="bg-green-400 w-4 h-4 rounded-sm"></div>
+                    <div class="bg-zinc-400 mt-2 w-4 h-4 rounded-sm -ml-2"></div> --}}
+                    <img src="{{ asset('dharma_agung.jpg') }}" class=" h-25" alt="">
                 </div>
-                <h1 class="text-2xl font-bold text-blue-900">
+                <h1 class="text-1xl font-bold text-red-700">
                     SISTEM TAGIHAN SEKOLAH
                 </h1>
             </div>

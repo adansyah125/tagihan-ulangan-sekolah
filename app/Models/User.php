@@ -23,7 +23,7 @@ class User extends Authenticatable
         'password',
         'role',
         'nis',
-        'kelas',
+        'kelas_id',
         'alamat',
         'nama_orangtua',
     ];
@@ -59,5 +59,10 @@ class User extends Authenticatable
     public function tagihanDetail()
     {
         return $this->hasMany(TagihanDetail::class);
+    }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
     }
 }

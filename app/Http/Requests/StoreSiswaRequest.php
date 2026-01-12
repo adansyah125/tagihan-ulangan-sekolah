@@ -21,9 +21,9 @@ class StoreSiswaRequest extends FormRequest
             'nis'           => 'required|string|unique:users,nis',
             'email'         => 'required|email|unique:users,email',
             'nama'          => 'required|string|max:255',
-            'kelas'         => 'required|string|max:50',
             'alamat'        => 'nullable|string',
             'nama_orangtua' => 'nullable|string|max:255',
+            'kelas_id'      => 'required',
         ];
     }
 

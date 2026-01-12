@@ -12,6 +12,7 @@ Aplikasi Tagihan ulangan sekolah
 7. jalankan - `php artisan migrate --seed`
 8. jalankan - `php arisan storage:link`
 9. jalankaan server laravel - `php artisan serve`
+10. job queue untuk email  `php artisan queue:work`
 
 
 

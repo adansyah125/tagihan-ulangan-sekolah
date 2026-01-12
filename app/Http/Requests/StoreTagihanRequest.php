@@ -23,6 +23,7 @@ class StoreTagihanRequest extends FormRequest
     {
         return [
             'tahun_ajaran' => 'required|string|max:20',
+            'jenis_tagihan' => 'required',
             'nominal' => 'required|numeric|min:0',
             'tgl_tagihan' => 'required|date',
             'jatuh_tempo' => 'required|date|after_or_equal:tgl_tagihan',

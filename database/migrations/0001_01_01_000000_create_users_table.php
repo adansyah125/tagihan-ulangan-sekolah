@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['staf', 'siswa'])->default('staf');
             $table->integer('nis')->nullable();
-            $table->string('kelas')->nullable();
+            // $table->string('kelas')->nullable();
+            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->cascadeOnDelete();
             $table->text('alamat')->nullable();
             $table->string('nama_orangtua')->nullable();
             $table->rememberToken();

@@ -28,15 +28,28 @@ Route::middleware(['auth', 'siswa'])->group(function () {
 
 Route::middleware(['auth', 'staf'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    // siswa
     Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('admin.siswa');
     Route::get('/admin/siswa/{user}', [SiswaController::class, 'show'])->name('admin.siswa.show');
     Route::post('/admin/siswa/store', [SiswaController::class, 'store'])->name('admin.siswa.store');
     Route::put('/admin/siswa/{user}', [SiswaController::class, 'update'])->name('admin.siswa.update');
     Route::delete('/admin/siswa/{user}/delete', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
+
+    // tagihan 
     Route::get('/admin/tagihan/uts', [TagihanController::class, 'indexUTS'])->name('admin.tagihan.uts');
     Route::post('/admin/tagihan/uts', [TagihanController::class, 'storeUTS'])->name('admin.tagihan.uts.store');
-    Route::get('/admin/tagihan/uas', [TagihanController::class, 'indexUAS'])->name('admin.tagihan.uas');
-    Route::post('/admin/tagihan/uas', [TagihanController::class, 'storeUAS'])->name('admin.tagihan.uas.store');
+    Route::delete('/admin/tagihan/uts/{id}/destroy', [TagihanController::class, 'destroy'])->name('tagihan.destroy');
+    Route::post('/admin/tagihan/uts/akses/{id}', [TagihanController::class, 'updateAkses'])->name('admin.tagihan.uts.aktif');
+
+    // monitor pembayaran
+    Route::get('/admin/tagihan/monitor', [TagihanController::class, 'monitor'])->name('admin.tagihan.monitor');
+
+
+    // laporan
     Route::get('/admin/laporan/keuangan', [LaporanController::class, 'indexKeuangan'])->name('admin.laporan.keuangan');
     Route::get('/admin/laporan/tagihan', [LaporanController::class, 'indexLaporan'])->name('admin.laporan.tagihan');
+});
+Route::get('/test-email', function () {
+    $detail = App\Models\TagihanDetail::first();
+    return new App\Mail\TagihanNotification($detail);
 });

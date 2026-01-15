@@ -4,16 +4,57 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use App\Models\User;
+use DomainException;
+use App\Models\Kelas;
 use App\Models\Tagihan;
 use App\Models\Pembayaran;
 use Illuminate\Support\Str;
 use App\Models\TagihanDetail;
+use App\Mail\TagihanNotification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class TagihanService
 {
+    public function getTagihanList()
+    {
+        return Tagihan::query()
+            ->select([
+                'id',
+                'jenis_tagihan',
+                'tahun_ajaran',
+                'nominal',
+                'tgl_tagihan',
+                'jatuh_tempo',
+                'status',
+            ])
+            ->groupBy([
+                'id',
+                'jenis_tagihan',
+                'tahun_ajaran',
+                'nominal',
+                'tgl_tagihan',
+                'jatuh_tempo',
+                'status',
+            ])
+            ->latest('tahun_ajaran')
+            ->get();
+    }
 
-    public function storeUTS(array $data): void
+    public function getSiswaList()
+    {
+        return User::query()
+            ->where('role', 'siswa')
+            ->oldest('name')
+            ->get();
+    }
+
+    public function getAllKelas()
+    {
+        return Kelas::all();
+    }
+
+    public function store(array $data): void
     {
         Tagihan::create([
             'tahun_ajaran' => $data['tahun_ajaran'],
@@ -26,76 +67,101 @@ class TagihanService
         ]);
     }
 
-
-
-    public function buatTagihan(array $data): void
+    public function buatDetailTagihan(int $tagihanId, array $data): int
     {
-        DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($tagihanId, $data) {
 
-            // ❌ Cegah tagihan UTS dobel
-            $exists = Tagihan::where('jenis_tagihan', 'UTS')
-                ->where('tahun_ajaran', $data['tahun_ajaran'])
-                ->where('akses', $data['akses'])
-                ->when(
-                    $data['akses'] === 'kelas',
-                    fn($q) =>
-                    $q->where('kelas_id', $data['kelas_id'])
-                )
-                ->when(
-                    $data['akses'] === 'siswa',
-                    fn($q) =>
-                    $q->where('user_id', $data['user_id'])
-                )
-                ->exists();
+            $tagihan = Tagihan::findOrFail($tagihanId);
 
-            if ($exists) {
-                throw new \DomainException('Tagihan UTS sudah dibuat.');
-            }
-
-            // 🧾 Buat tagihan utama
-            $tagihan = Tagihan::create([
-                'jenis_tagihan' => 'UTS',
-                'akses'         => $data['akses'], // siswa | kelas | semua
-                'kelas_id'      => $data['kelas_id'] ?? null,
-                'user_id'       => $data['user_id'] ?? null,
-                'nominal'       => $data['nominal'],
-                'tahun_ajaran'  => $data['tahun_ajaran'],
-                'tgl_tagihan'   => $data['tgl_tagihan'],
-                'jatuh_tempo'   => $data['jatuh_tempo'],
-                'status'        => 'Buka',
-            ]);
-
-            // 🔎 Tentukan target siswa
-            $siswas = match ($data['akses']) {
-                'siswa' => User::where('id', $data['user_id'])->get(),
-
-                'kelas' => User::where('role', 'siswa')
-                    ->where('kelas_id', $data['kelas_id'])
-                    ->get(),
-
-                'semua' => User::where('role', 'siswa')->get(),
-            };
+            $siswas = $this->getTargetSiswa(
+                $data['akses_pilihan'],
+                $data['user_id'] ?? null,
+                $data['kelas_id'] ?? null
+            );
 
             if ($siswas->isEmpty()) {
-                throw new \DomainException('Data siswa tidak ditemukan.');
+                throw new DomainException('Tidak ada siswa ditemukan');
             }
 
-            // 🧾 Buat detail tagihan
             foreach ($siswas as $siswa) {
-                TagihanDetail::create([
-                    'tagihan_id'   => $tagihan->id,
-                    'user_id'      => $siswa->id,
-                    'kelas_id'     => $siswa->kelas_id,
-                    'kd_tagihan'   => strtoupper(str()->random(12)),
-                    'nominal'      => $data['nominal'],
-                    'jenis_tagihan' => $data['jenis_tagihan'],
-                    'tgl_tagihan'  => $data['tgl_tagihan'],
-                    'jatuh_tempo'  => $data['jatuh_tempo'],
-                    'status'       => 'belum lunas',
-                ]);
+                $detail = TagihanDetail::updateOrCreate(
+                    [
+                        'tagihan_id' => $tagihan->id,
+                        'user_id'    => $siswa->id,
+                    ],
+                    [
+                        'kelas_id'      => $siswa->kelas_id,
+                        'kd_tagihan'    => $this->generateKodeTagihan(),
+                        'nominal'       => $tagihan->nominal,
+                        'jenis_tagihan' => $tagihan->jenis_tagihan,
+                        'tgl_tagihan'   => $tagihan->tgl_tagihan,
+                        'jatuh_tempo'   => $tagihan->jatuh_tempo,
+                        'status'        => 'belum lunas',
+                    ]
+                );
+
+                $this->kirimEmailJikaAda($siswa->email, $detail);
             }
+
+            return $siswas->count();
         });
     }
+
+    private function getTargetSiswa(string $jangkauan, ?int $userId, ?int $kelasId)
+    {
+        $query = User::where('role', 'siswa');
+
+        return match ($jangkauan) {
+            'siswa' => $query->where('id', $userId)->get(),
+            'kelas' => $query->where('kelas_id', $kelasId)->get(),
+            default => $query->get(),
+        };
+    }
+
+    private function generateKodeTagihan(): string
+    {
+        return 'TRX-' . strtoupper(Str::random(8));
+    }
+
+    private function kirimEmailJikaAda(?string $email, TagihanDetail $detail): void
+    {
+        if ($email) {
+            Mail::to($email)->queue(new TagihanNotification($detail));
+        }
+    }
+
+    public function toggleStatus(Tagihan $tagihan): string
+    {
+        $statusBaru = $tagihan->status === 'Buka' ? 'Tutup' : 'Buka';
+
+        $tagihan->update([
+            'status' => $statusBaru,
+        ]);
+
+        return $statusBaru;
+    }
+
+
+    public function getMonitorTagihan(?string $search, int $perPage = 10)
+    {
+        return TagihanDetail::with(['user', 'kelas'])
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($sub) use ($search) {
+                    $sub->where('kd_tagihan', 'like', "%{$search}%")
+                        ->orWhere('jenis_tagihan', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($u) use ($search) {
+                            $u->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('kelas', function ($k) use ($search) {
+                            $k->where('kelas', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
 
     public function updatePembayaran(TagihanDetail $tagihan): void
     {

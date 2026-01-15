@@ -9,15 +9,15 @@
         <div class="flex flex-col gap-6 mb-8">
             <div class="flex items-center gap-3">
                 <div class="p-3 bg-indigo-600/20 rounded-2xl border border-indigo-500/30">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 text-indigo-400">
                         <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5l5 5v11a2 2 0 01-2 2z" />
+                            d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
                     </svg>
                 </div>
                 <div>
                     <h2 class="text-xl md:text-2xl font-black text-white tracking-tight">Monitor Pembayaran</h2>
-                    <p class="text-xs text-gray-500 font-medium italic">Pantau status transaksi siswa secara real-time</p>
+                    <p class="text-xs text-gray-500 font-medium">Pantau status transaksi siswa secara real-time</p>
                 </div>
             </div>
 

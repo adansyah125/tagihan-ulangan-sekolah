@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->decimal('nominal', 10, 2);
             $table->string('tahun_ajaran');
-            $table->date('tgl_tagihan');
-            $table->date('jatuh_tempo');
+            $table->dateTime('tgl_tagihan');
+            $table->dateTime('jatuh_tempo');
             $table->enum('status', ['Buka', 'Tutup'])->default('Tutup');
             $table->timestamps();
         });

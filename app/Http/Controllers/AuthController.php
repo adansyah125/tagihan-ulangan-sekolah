@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\AuthService;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Svg\Tag\Rect;
 
 class AuthController extends Controller
 {
@@ -11,90 +14,50 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+
+    // Auth Siswa
     public function indexSiswa()
     {
         return view('auth.login_siswa');
     }
 
+    public function logSiswa(LoginRequest $request, AuthService $authService)
+    {
+        return $authService->login(
+            $request->validated(),
+            'siswa',
+            '/dashboard'
+        );
+    }
+    public function logoutSiswa(Request $request, AuthService $authService)
+    {
+        return $authService->logout(
+            $request,
+            'siswa',
+            'login'
+        );
+    }
+
+    // Auth Staf
     public function indexStaf()
     {
         return view('auth.login_staf');
     }
-
-    // LOGIN SISWA
-    public function logSiswa(Request $request)
+    public function logStaf(LoginRequest $request, AuthService $authService)
     {
-        $credentials = $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt($credentials)) {
-
-            // cek role
-            if (Auth::user()->role !== 'siswa') {
-                Auth::logout();
-                return back()->with('error', 'Maaf, Anda tidak punya akses sebagai siswa.');
-            }
-
-            // login sukses siswa
-            return redirect('/dashboard');
-        }
-
-        return back()->with('error', 'Email atau password salah.');
+        return $authService->login(
+            $request->validated(),
+            'staf',
+            '/admin/dashboard'
+        );
     }
 
-    // LOGIN STAF
-    public function logStaf(Request $request)
+    public function logoutStaf(Request $request, AuthService $authService)
     {
-        $credentials = $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (Auth::attempt($credentials)) {
-
-            // cek role
-            if (Auth::user()->role !== 'staf') {
-                Auth::logout();
-                return back()->with('error', 'Maaf, Anda tidak punya akses sebagai staf.');
-            }
-
-            // login sukses staf
-            return redirect('admin/dashboard');
-        }
-
-        return back()->with('error', 'Email atau password salah.');
-    }
-
-    public function logoutSiswa(Request $request)
-    {
-        if (Auth::check() && Auth::user()->role === 'siswa') {
-            Auth::logout();
-
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return redirect()->route('login')
-                ->with('success', 'Berhasil logout');
-        }
-
-        return redirect()->back()->with('error', 'Aksi tidak diizinkan');
-    }
-
-    public function logoutStaf(Request $request)
-    {
-        // Pastikan yang logout adalah staf
-        if (Auth::check() && Auth::user()->role === 'staf') {
-            Auth::logout();
-
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return redirect()->route('login')
-                ->with('success', 'Berhasil logout');
-        }
-
-        return redirect()->back()->with('error', 'Aksi tidak diizinkan');
+        return $authService->logout(
+            $request,
+            'staf',
+            'login'
+        );
     }
 }

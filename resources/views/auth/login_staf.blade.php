@@ -49,7 +49,7 @@
                     Sistem Tagihan Ulangan
                 </span>
                 <span class="block text-2xl font-medium mt-1">
-                    Sekolah Dharma Agung Bandung
+                    Dharma Agung
                 </span>
             </h2>
 

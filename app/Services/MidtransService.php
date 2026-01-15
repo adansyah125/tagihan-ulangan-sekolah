@@ -64,7 +64,7 @@ class MidtransService
                 'user_id'          => $tagihan->user_id,
                 'tagihan_id'       => $tagihan->id,
                 'kd_pembayaran'    => 'ORD' . rand(1000000, 9999999),
-                'tgl_bayar'        => now()->toDateString(),
+                'tgl_bayar'        => now(),
                 'jenis_tagihan'    => $tagihan->jenis_tagihan,
                 'jumlah_bayar'     => $tagihan->nominal,
                 'status_pembayaran' => 'lunas',

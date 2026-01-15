@@ -4,11 +4,31 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Kelas;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class SiswaService
 {
+
+    public function getSiswaList(?string $search)
+    {
+        return User::query()
+            ->where('role', 'siswa')
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($sub) use ($search) {
+                    $sub->where('name', 'like', "%{$search}%")
+                        ->orWhere('nis', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10);
+    }
+
+    public function getKelasWithUser()
+    {
+        return Kelas::with('user')->get();
+    }
     public function create(array $data): User
     {
         return User::create([

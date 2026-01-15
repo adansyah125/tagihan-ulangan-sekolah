@@ -11,17 +11,12 @@ use App\Models\Kelas;
 
 class SiswaController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, SiswaService $siswaService)
     {
-        $search = $request->search;
-        $data = User::latest()->where('role', 'siswa')
-            ->when($search, function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                    ->orWhere('nis', 'like', "%$search%");
-            })
-            ->paginate(10);
-        $kelas = Kelas::all();
-        return view('admin.siswa', compact('data', 'kelas'));
+        return view('admin.siswa', [
+            'data'  => $siswaService->getSiswaList($request->search),
+            'kelas' => $siswaService->getKelasWithUser(),
+        ]);
     }
 
     public function store(StoreSiswaRequest $request, SiswaService $service)
@@ -33,7 +28,7 @@ class SiswaController extends Controller
 
     public function show(User $user)
     {
-        $kelas = Kelas::all();
+        $kelas = Kelas::with('user')->get();
         return view('admin.show-siswa', compact('user', 'kelas'));
     }
 

@@ -37,8 +37,8 @@ Route::middleware(['auth', 'staf'])->group(function () {
     Route::delete('/admin/siswa/{user}/delete', [SiswaController::class, 'destroy'])->name('admin.siswa.destroy');
 
     // tagihan 
-    Route::get('/admin/tagihan/uts', [TagihanController::class, 'indexUTS'])->name('admin.tagihan.uts');
-    Route::post('/admin/tagihan/uts', [TagihanController::class, 'storeUTS'])->name('admin.tagihan.uts.store');
+    Route::get('/admin/tagihan/uts', [TagihanController::class, 'index'])->name('admin.tagihan.uts');
+    Route::post('/admin/tagihan/uts', [TagihanController::class, 'store'])->name('admin.tagihan.uts.store');
     Route::delete('/admin/tagihan/uts/{id}/destroy', [TagihanController::class, 'destroy'])->name('tagihan.destroy');
     Route::post('/admin/tagihan/uts/akses/{id}', [TagihanController::class, 'buatDetailTagihan'])->name('admin.tagihan.uts.aktif');
     Route::post('/admin/tagihan/{tagihan}/toggle-status', [TagihanController::class, 'toggleStatus'])->name('admin.tagihan.toggle-status');

@@ -128,8 +128,6 @@
                                 @endif
                             </td>
 
-
-
                             <td class="px-6 py-4 text-center">
                                 <a href="{{ $item->wa_link }}" target="_blank"
                                     class="inline-flex items-center gap-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-500 hover:text-white px-4 py-2 rounded-xl text-[11px] font-black transition-all group/btn uppercase tracking-widest border border-emerald-500/20 shadow-sm">

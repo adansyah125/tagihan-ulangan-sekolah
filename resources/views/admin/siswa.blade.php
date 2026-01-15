@@ -4,17 +4,30 @@
 
 @section('content')
     <div class="bg-gray-800/60 backdrop-blur-xl text-gray-100 rounded-2xl p-6 shadow-2xl border border-gray-700">
+        {{-- Header --}}
 
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-            <h2 class="text-2xl font-bold text-gray-200 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-gray-400" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M12 14l9-5-9-5-9 5 9 5zM12 14v7m0-7l-9-5m9 5l9-5" />
-                </svg>
-                Data Siswa
-            </h2>
+        <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4 bg-gray-800/20 p-4 rounded-2xl border border-gray-700/50 backdrop-blur-md">
 
+            <div class="flex items-center gap-4">
+                <div
+                    class="w-12 h-12 flex items-center justify-center bg-indigo-600/10 rounded-xl border border-indigo-500/20 shadow-inner">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 text-indigo-400">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+                    </svg>
+
+                </div>
+
+                <div>
+                    <h2 class="text-xl md:text-2xl font-black text-white tracking-tight">
+                        Manajemen Siswa
+                    </h2>
+                    <p class="text-xs text-gray-500 font-medium">Manajemen Data Siswa</p>
+                </div>
+            </div>
             <div class="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
                 <form method="GET">
                     <input type="text" id="searchInput" placeholder="Cari nama atau NIS..."
@@ -32,6 +45,8 @@
                     Tambah Siswa
                 </button>
             </div>
+
+
         </div>
         {{-- Success Alert --}}
         @if (session('success'))

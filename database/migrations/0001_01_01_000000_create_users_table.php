@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('kelas_id')->nullable()->constrained('kelas')->cascadeOnDelete();
             $table->text('alamat')->nullable();
             $table->string('nama_orangtua')->nullable();
+            $table->char('telp')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

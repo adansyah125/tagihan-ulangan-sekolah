@@ -38,6 +38,7 @@ class UpdateSiswaRequest extends FormRequest
             'alamat' => 'nullable|string',
             'nama_orangtua' => 'nullable|string|max:100',
             'password' => 'nullable|min:6',
+            'telp' => 'nullable',
         ];
     }
 }

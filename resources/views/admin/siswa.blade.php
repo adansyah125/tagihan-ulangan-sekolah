@@ -16,9 +16,12 @@
             </h2>
 
             <div class="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
-                <input type="text" id="searchInput" placeholder="Cari nama atau NIS..."
-                    class="bg-gray-900/60 text-gray-100 border border-gray-700 rounded-xl px-4 py-2 w-full md:w-64
+                <form method="GET">
+                    <input type="text" id="searchInput" placeholder="Cari nama atau NIS..."
+                        value="{{ request('search') }}" name="search"
+                        class="bg-gray-900/60 text-gray-100 border border-gray-700 rounded-xl px-4 py-2 w-full md:w-64
                 focus:ring-2 focus:ring-gray-500 focus:outline-none placeholder-gray-500">
+                </form>
 
                 <button onclick="openModal()"
                     class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 px-5 py-2 rounded-xl text-white font-semibold transition">
@@ -30,6 +33,18 @@
                 </button>
             </div>
         </div>
+        {{-- Success Alert --}}
+        @if (session('success'))
+            <div class="p-4 rounded-lg bg-green-50 border border-green-200 mb-2 dark:bg-green-900/30 dark:border-green-800">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <p class="text-green-800 dark:text-green-200 font-medium">Berhasil! Penambahan data telah disimpan.</p>
+                </div>
+            </div>
+        @endif
 
         {{-- Desktop Table --}}
         <div class="hidden md:block overflow-hidden rounded-2xl border border-gray-700 bg-gray-900/50 shadow-xl">
@@ -141,6 +156,13 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        {{-- PAGINATION --}}
+        <div class="mt-10 px-2 flex justify-center">
+            <div class="w-full md:w-auto">
+                {{ $data->links('pagination::tailwind') }}
+            </div>
         </div>
 
         {{-- Mobile Card View --}}
@@ -259,7 +281,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="space-y-1">
                             <label class="text-xs font-medium text-gray-500 ml-1">NIS</label>
-                            <input type="text" name="nis" required
+                            <input type="number" name="nis" required
                                 class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none text-white transition placeholder:text-gray-600"
                                 placeholder="Contoh: 2024001">
                         </div>
@@ -280,11 +302,12 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="space-y-1">
-                            <label class="text-xs font-medium text-gray-500 ml-1">Nama Lengkap</label>
-                            <input type="text" name="nama" required
+                            <label class="text-xs font-medium text-gray-500 ml-1">No Whatsapp</label>
+                            <input type="number" name="telp" required
                                 class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none text-white transition"
-                                placeholder="Nama Lengkap">
+                                placeholder="No WhatsApp">
                         </div>
+
 
                         <div class="space-y-1">
                             <label class="text-xs font-medium text-gray-500 ml-1">Kelas</label>
@@ -304,6 +327,12 @@
                                     </svg>
                                 </div>
                             </div>
+                        </div>
+                        <div class="space-y-1 md:col-span-2">
+                            <label class="text-xs font-medium text-gray-500 ml-1">Nama Lengkap</label>
+                            <input type="text" name="nama" required
+                                class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none text-white transition"
+                                placeholder="Nama Lengkap">
                         </div>
 
                         <div class="md:col-span-2 space-y-1">
@@ -345,7 +374,6 @@
     </div>
 
     <style>
-        /* Agar scrollbar terlihat modern di mobile (Chrome/Safari) */
         .custom-scrollbar::-webkit-scrollbar {
             width: 4px;
         }
@@ -367,6 +395,8 @@
             document.getElementById('siswaModal').classList.remove('flex')
         }
     </script>
+
+
 
 
 

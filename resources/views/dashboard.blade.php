@@ -35,15 +35,15 @@
 
             <div class="hidden sm:flex items-center gap-6">
                 <div class="text-right mr-2">
-                    <p class="text-[10px] font-bold text-gray-400  tracking-widest leading-none">Status Siswa
+                    <p class="text-[10px] font-bold text-gray-400 ">Status Siswa
                     </p>
                     <p class="text-sm font-bold text-gray-700">{{ Auth()->user()->name }}</p>
                 </div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"
-                        class="bg-gray-900 text-white px-6 py-2 rounded-xl font-bold text-xs hover:bg-red-600 transition-all active:scale-95 shadow-lg shadow-gray-200 cursor-pointer">
-                        LOGOUT
+                        class="bg-gray-600 text-white px-6 py-2 rounded-xl font-bold text-xs hover:bg-red-600 transition-all active:scale-95 shadow-lg shadow-gray-200 cursor-pointer">
+                        Keluar
                     </button>
                 </form>
             </div>
@@ -64,7 +64,7 @@
                 @csrf
                 <button
                     class="w-full bg-red-50 text-red-600 font-bold py-3 rounded-xl hover:bg-red-600 hover:text-white transition-all text-sm uppercase tracking-widest">
-                    Logout Sekarang
+                    Keluar
                 </button>
             </form>
         </div>
@@ -109,9 +109,14 @@
                     <p class="text-[10px] font-bold text-slate-400  tracking-widest">Kelas</p>
                     <p class="text-slate-600 ">{{ Auth()->user()->kelas->kelas ?? '-' }}</p>
                 </div>
-                <div class="md:col-span-2 space-y-1">
+
+                <div class="space-y-1">
                     <p class="text-[10px] font-bold text-slate-400  tracking-widest">Alamat</p>
                     <p class="text-slate-700 font-medium">{{ Auth()->user()->alamat ?? '-' }}</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[10px] font-bold text-slate-400  tracking-widest">No Whatsapp</p>
+                    <p class="text-slate-700 font-medium">{{ Auth()->user()->telp ?? '-' }}</p>
                 </div>
                 <div class="space-y-1">
                     <p class="text-[10px] font-bold text-slate-400  tracking-widest">Email</p>
@@ -174,7 +179,7 @@
                 @empty
                     <div
                         class="col-span-full py-12 text-center bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200">
-                        <p class="text-slate-400 font-bold italic text-sm text-center">Tidak ada tagihan aktif saat ini.
+                        <p class="text-slate-400  italic text-sm text-center">Tidak ada tagihan aktif saat ini.
                         </p>
                     </div>
                 @endforelse
@@ -186,7 +191,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
                 <div class="text-center md:text-left">
                     <h3 class="text-xl  text-slate-800">Riwayat Tagihan</h3>
-                    <p class="text-xs font-bold text-slate-400 italic">Data seluruh riwayat tagihan Anda</p>
+                    <p class="text-xs  text-slate-400 italic">Data seluruh riwayat tagihan Anda</p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
@@ -304,8 +309,15 @@
                                             Bayar
                                         </a>
                                     @elseif($item->status == 'lunas')
-                                        <a href="{{ route('payment', $item->kd_tagihan) }}"
-                                            class="inline-block bg-slate-900 text-white px-6 py-2 rounded-xl text-[9px]  hover:bg-indigo-600 hover:shadow-lg hover:shadow-slate-200 transition-all  tracking-widest">
+                                        <a href="{{ route('cetak', $item->kd_tagihan) }}" target="_blank"
+                                            class="inline-flex gap-1 bg-gray-600 text-white px-6 py-2 rounded-xl text-[9px]  hover:bg-red-600 hover:shadow-lg hover:shadow-slate-200 transition-all  tracking-widest">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="h-3 w-3">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+                                            </svg>
+
                                             Cetak
                                         </a>
                                     @else

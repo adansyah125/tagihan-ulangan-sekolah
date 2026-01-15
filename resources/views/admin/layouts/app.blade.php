@@ -309,6 +309,15 @@
             });
         });
     </script>
+    <script>
+        setTimeout(function() {
+            const alert = document.getElementById('success-alert');
+            if (alert) {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }
+        }, 3000);
+    </script>
 
 
 </body>

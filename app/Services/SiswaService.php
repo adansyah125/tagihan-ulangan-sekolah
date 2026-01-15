@@ -20,6 +20,7 @@ class SiswaService
             'nama_orangtua' => $data['nama_orangtua'] ?? null,
             'password'      => Hash::make($data['nis']),
             'role'          => 'siswa',
+            'telp'          => $data['telp'],
             'remember_token' => Str::random(10),
         ]);
     }
@@ -33,6 +34,7 @@ class SiswaService
             'name' => $data['name'],
             'kelas_id' => $data['kelas_id'],
             'alamat' => $data['alamat'] ?? null,
+            'telp'          => $data['telp'],
             'nama_orangtua' => $data['nama_orangtua'] ?? null,
         ]);
 

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'kelas_id',
         'alamat',
         'nama_orangtua',
+        'telp'
     ];
 
     /**

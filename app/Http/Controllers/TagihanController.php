@@ -44,8 +44,6 @@ class TagihanController extends Controller
         return view('admin.tagihan.tagihan', compact('data', 'siswas', 'kelas'));
     }
 
-
-
     public function storeUTS(StoreTagihanRequest $request, TagihanService $tagihanService)
     {
         try {
@@ -60,12 +58,6 @@ class TagihanController extends Controller
         }
     }
 
-    public function akses($id)
-    {
-        $tagihan = Tagihan::findOrFail($id);
-        return view('admin.tagihan.form', compact('tagihan'));
-    }
-
 
     public function destroy(Tagihan $id)
     {
@@ -73,114 +65,68 @@ class TagihanController extends Controller
         return back()->with('success', 'Tagihan berhasil dihapus');
     }
 
-    // public function updateAkses(Request $request, $id)
-    // {
-    //     $tagihan = Tagihan::findOrFail($id);
-    //     $statusBaru = $request->status; // 'Buka' atau 'Tutup'
-    //     $jangkauan = $request->akses_pilihan; // 'siswa', 'kelas', atau 'semua'
-
-    //     // 1. Update status dan jangkauan di tabel utama
-    //     $tagihan->update([
-    //         'status' => $statusBaru,
-    //         'akses' => $jangkauan
-    //     ]);
-
-    //     // 2. Jika status dibuka, buat detail tagihan untuk siswa
-    //     if ($statusBaru == 'Buka') {
-    //         $querySiswa = User::where('role', 'siswa');
-
-    //         if ($jangkauan == 'siswa') {
-    //             $querySiswa->where('id', $tagihan->user_id);
-    //         } elseif ($jangkauan == 'kelas') {
-    //             $querySiswa->where('kelas_id', $tagihan->kelas_id);
-    //         }
-
-    //         $siswas = $querySiswa->get();
-
-    //         foreach ($siswas as $siswa) {
-    //             // Menggunakan updateOrCreate agar tidak terjadi duplikasi data
-    //             TagihanDetail::updateOrCreate(
-    //                 [
-    //                     'tagihan_id' => $tagihan->id,
-    //                     'user_id'    => $siswa->id
-    //                 ],
-    //                 // Jika belum ada/ingin diupdate, isi kolom-kolom berikut:
-    //                 [
-    //                     'kelas_id'      => $siswa->kelas_id, // Diambil dari data siswa
-    //                     'kd_tagihan'    => Str::random(8), // Pastikan di Master ada kd_tagihan
-    //                     'nominal'       => $tagihan->nominal,
-    //                     'jenis_tagihan' => $tagihan->jenis_tagihan,
-    //                     'tgl_tagihan'   => $tagihan->tgl_tagihan,
-    //                     'jatuh_tempo'   => $tagihan->jatuh_tempo,
-    //                     'status'        => 'belum lunas', // Status awal di level detail
-    //                 ]
-    //             );
-    //         }
-
-    //         return redirect()->back()->with('success', "Akses dibuka untuk " . $siswas->count() . " siswa.");
-    //     }
-
-    //     return redirect()->back()->with('success', "Akses tagihan telah ditutup.");
-    // }
-
-    public function updateAkses(Request $request, $id)
+    public function buatDetailTagihan(Request $request, $id)
     {
         $tagihan = Tagihan::findOrFail($id);
-        $statusBaru = $request->status; // 'Buka' atau 'Tutup'
-        $jangkauan = $request->akses_pilihan; // 'siswa', 'kelas', atau 'semua'
+        $jangkauan = $request->akses_pilihan; // siswa | kelas | semua
 
-        // 1. Update status dan jangkauan di tabel utama
-        $tagihan->update([
-            'status' => $statusBaru,
-            'akses' => $jangkauan
-        ]);
+        $querySiswa = User::where('role', 'siswa');
 
-        // 2. Jika status dibuka, buat detail tagihan untuk siswa
-        if ($statusBaru == 'Buka') {
-            $querySiswa = User::where('role', 'siswa');
-
-            if ($jangkauan == 'siswa') {
-                // AMBIL DARI REQUEST (HASIL PILIHAN SELECT DI MODAL)
-                $querySiswa->where('id', $request->user_id);
-            } elseif ($jangkauan == 'kelas') {
-                // AMBIL DARI REQUEST (HASIL PILIHAN SELECT DI MODAL)
-                $querySiswa->where('kelas_id', $request->kelas_id);
-            }
-
-            $siswas = $querySiswa->get();
-
-            if ($siswas->isEmpty()) {
-                return redirect()->back()->with('error', "Tidak ada siswa ditemukan.");
-            }
-
-            foreach ($siswas as $siswa) {
-                $detail =  TagihanDetail::updateOrCreate(
-                    [
-                        'tagihan_id' => $tagihan->id,
-                        'user_id'    => $siswa->id
-                    ],
-                    [
-                        'kelas_id'      => $siswa->kelas_id,
-                        'kd_tagihan'    => 'TRX-' . strtoupper(Str::random(8)),
-                        'nominal'       => $tagihan->nominal,
-                        'jenis_tagihan' => $tagihan->jenis_tagihan,
-                        'tgl_tagihan'   => $tagihan->tgl_tagihan,
-                        'jatuh_tempo'   => $tagihan->jatuh_tempo,
-                        'status'        => 'belum lunas',
-                    ]
-                );
-                if ($siswa->email) {
-                    Mail::to($siswa->email)->queue(new TagihanNotification($detail));
-                    sleep(2);
-                }
-            }
-
-            return redirect()->back()->with('success', "Akses dibuka untuk " . $siswas->count() . " siswa.");
+        if ($jangkauan === 'siswa') {
+            $querySiswa->where('id', $request->user_id);
+        } elseif ($jangkauan === 'kelas') {
+            $querySiswa->where('kelas_id', $request->kelas_id);
         }
 
-        return redirect()->back()->with('success', "Akses tagihan telah ditutup.");
+        $siswas = $querySiswa->get();
+
+        if ($siswas->isEmpty()) {
+            return back()->with('error', 'Tidak ada siswa ditemukan');
+        }
+
+        foreach ($siswas as $siswa) {
+            $detail = TagihanDetail::updateOrCreate(
+                [
+                    'tagihan_id' => $tagihan->id,
+                    'user_id'    => $siswa->id,
+                ],
+                [
+                    'kelas_id'      => $siswa->kelas_id,
+                    'kd_tagihan'    => 'TRX-' . strtoupper(Str::random(8)),
+                    'nominal'       => $tagihan->nominal,
+                    'jenis_tagihan' => $tagihan->jenis_tagihan,
+                    'tgl_tagihan'   => $tagihan->tgl_tagihan,
+                    'jatuh_tempo'   => $tagihan->jatuh_tempo,
+                    'status'        => 'belum lunas',
+                ]
+            );
+
+            if ($siswa->email) {
+                Mail::to($siswa->email)->queue(new TagihanNotification($detail));
+            }
+        }
+
+        return back()->with('success', 'Tagihan berhasil dibuat untuk ' . $siswas->count() . ' siswa');
     }
 
+
+
+    public function toggleStatus(Tagihan $tagihan)
+    {
+        $tagihan->update([
+            'status' => $tagihan->status === 'Buka' ? 'Tutup' : 'Buka'
+        ]);
+
+        return back()->with(
+            'success',
+            $tagihan->status === 'Buka'
+                ? 'Tagihan berhasil dibuka'
+                : 'Tagihan berhasil ditutup'
+        );
+    }
+
+
+    //Monitor pembayaran
     public function monitor(Request $request)
     {
         $search = $request->search;
@@ -200,5 +146,13 @@ class TagihanController extends Controller
             ->paginate(10)
             ->withQueryString();
         return view('admin.tagihan.monitor', compact('data'));
+    }
+
+    public function updateBayar(TagihanDetail $tagihan, TagihanService $service)
+    {
+
+        $service->updatePembayaran($tagihan);
+
+        return back()->with('success', 'Pembayaran berhasil diperbarui');
     }
 }

@@ -26,7 +26,7 @@ class StoreTagihanRequest extends FormRequest
             'jenis_tagihan' => 'required',
             'nominal' => 'required|numeric|min:0',
             'tgl_tagihan' => 'required|date',
-            'jatuh_tempo' => 'required|date|after_or_equal:tgl_tagihan',
+            'jatuh_tempo' => 'required|date',
         ];
     }
 }

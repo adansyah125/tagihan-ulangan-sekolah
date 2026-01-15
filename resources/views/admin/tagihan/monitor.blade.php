@@ -36,6 +36,19 @@
             </form>
         </div>
 
+        @if (session('success'))
+            <div id="success-alert"
+                class="p-4 rounded-lg bg-green-50 border border-green-200 mb-2 dark:bg-green-900/30 dark:border-green-800">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <p class="text-green-800 dark:text-green-200 font-medium">Berhasil! {{ session('success') }}</p>
+                </div>
+            </div>
+        @endif
+
         {{-- GRID DATA --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             @forelse ($data as $item)
@@ -110,16 +123,18 @@
                                 {{ \Carbon\Carbon::parse($item->jatuh_tempo)->format('d/m/y') }}
                             </p>
                         </div>
-
-                        <button
-                            class="flex items-center justify-center p-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-all active:scale-95 shadow-lg shadow-indigo-600/20 group/btn">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 group-hover/btn:rotate-12 transition-transform" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </button>
+                        <form action="{{ route('admin.tagihan.monitor.update', $item->id) }}" method="post">
+                            @csrf
+                            <button
+                                class="flex items-center justify-center p-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-all active:scale-95 shadow-lg shadow-indigo-600/20 group/btn">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-5 h-5 group-hover/btn:rotate-12 transition-transform" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </button>
+                        </form>
                     </div>
 
                 </div>

@@ -24,6 +24,7 @@ class StoreSiswaRequest extends FormRequest
             'alamat'        => 'nullable|string',
             'nama_orangtua' => 'nullable|string|max:255',
             'kelas_id'      => 'required',
+            'telp'          => 'nullable',
         ];
     }
 

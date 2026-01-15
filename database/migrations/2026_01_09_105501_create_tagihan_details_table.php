@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('kd_tagihan');
             $table->decimal('nominal', 10, 2);
             $table->enum('jenis_tagihan', ['UTS', 'UAS', 'Harian'])->default('UTS');
-            $table->date('tgl_tagihan');
-            $table->date('jatuh_tempo');
+            $table->dateTime('tgl_tagihan');
+            $table->dateTime('jatuh_tempo');
             $table->enum('status', ['belum lunas', 'lunas'])->default('belum lunas');
 
             $table->timestamps();

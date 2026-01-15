@@ -16,44 +16,48 @@
     </style>
 </head>
 
-<body class="bg-white min-h-screen flex items-center justify-center px-4">
-    <div class="text-center space-y-8 max-w-sm w-full">
-        <!-- Logo -->
-        <div class="flex flex-col items-center">
-            <div class="flex gap-1 mb-1">
-                {{-- <div class="bg-green-500 w-6 h-6 rounded-sm"></div>
+<body
+    class="bg-gradient-to-br from-pink-100 via-orange-100 to-red-100 min-h-screen flex items-center justify-center px-4">
+    <div
+        class="w-full max-w-2xl flex items-center justify-center p-15 bg-white rounded-2xl shadow-2xl overflow-hidden ">
+        <div class="text-center space-y-8 max-w-sm w-full">
+            <!-- Logo -->
+            <div class="flex flex-col items-center">
+                <div class="flex gap-1 mb-1">
+                    {{-- <div class="bg-green-500 w-6 h-6 rounded-sm"></div>
                 <div class="bg-zinc-500 mt-2 w-6 h-6 rounded-sm -ml-2"></div> --}}
-                <img src="{{ asset('dharma_agung.jpg') }}" class=" h-25" alt="">
+                    <img src="{{ asset('dharma_agung.jpg') }}" class=" h-25" alt="">
+                </div>
+                <span class="text-md font-bold text-red-700 ">SISTEM TAGIHAN SEKOLAH DHARMA AGUNG</span>
             </div>
-            <span class="text-md font-bold text-red-700">SISTEM TAGIHAN SEKOLAH DHARMA AGUNG</span>
-        </div>
 
-        <!-- Judul -->
-        <div>
-            <h1 class="text-2xl font-bold text-blue-900">Selamat Datang</h1>
-            <p class="text-gray-500 mt-1">Login Sebagai Apa?</p>
-        </div>
+            <!-- Judul -->
+            <div>
+                {{-- <h1 class="text-2xl font-bold text-blue-900">Selamat Datang</h1> --}}
+                <p class="text-gray-500 text-md text-center italic mt-1">Login Sebagai Apa?</p>
+            </div>
 
-        <div class="space-y-4">
-            <!-- Mahasiswa -->
-            <a href="{{ route('log_siswa') }}"
-                class="flex justify-between items-center bg-blue-900 text-white px-6 py-4 rounded-lg shadow hover:bg-blue-800 transition">
-                <div>
-                    <div class="font-semibold text-lg">Siswa</div>
-                    <div class="text-sm font-light">Portal akses Siswa</div>
-                </div>
-                <i class="bi bi-chevron-right text-xl"></i>
-            </a>
+            <div class="space-y-4">
+                <!-- Mahasiswa -->
+                <a href="{{ route('log_siswa') }}"
+                    class="flex justify-between items-center bg-orange-900 text-white px-6 py-4 rounded-lg shadow hover:bg-orange-800 transition">
+                    <div>
+                        <div class="font-semibold text-lg">Siswa</div>
+                        <div class="text-sm font-light">Portal akses Siswa</div>
+                    </div>
+                    <i class="bi bi-chevron-right text-xl"></i>
+                </a>
 
-            <!-- Staff Admin -->
-            <a href="{{ route('log_staf') }}"
-                class="flex justify-between items-center bg-blue-50 text-blue-900 px-6 py-4 rounded-lg shadow hover:bg-blue-100 transition">
-                <div>
-                    <div class="font-semibold text-lg">Staff Admin</div>
-                    <div class="text-sm font-light">Portal akses Staff Admin</div>
-                </div>
-                <i class="bi bi-chevron-right text-xl"></i>
-            </a>
+                <!-- Staff Admin -->
+                <a href="{{ route('log_staf') }}"
+                    class="flex justify-between items-center bg-orange-50 text-orange-900 px-6 py-4 rounded-lg shadow hover:bg-orange-100 transition">
+                    <div>
+                        <div class="font-semibold text-lg">Staff Admin</div>
+                        <div class="text-sm font-light">Portal akses Staff Admin</div>
+                    </div>
+                    <i class="bi bi-chevron-right text-xl"></i>
+                </a>
+            </div>
         </div>
     </div>
 </body>

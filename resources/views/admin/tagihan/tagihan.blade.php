@@ -41,10 +41,33 @@
             </button>
         </div>
 
+        @if (session('success'))
+            <div id="success-alert"
+                class="p-4 rounded-lg bg-green-50 border border-green-200 mb-2 dark:bg-green-900/30 dark:border-green-800">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <p class="text-green-800 dark:text-green-200 font-medium">Berhasil! {{ session('success') }}</p>
+                </div>
+            </div>
+        @elseif (Session('error'))
+            <div class="p-4 rounded-lg bg-red-50 border border-red-200 dark:bg-red-900/30 dark:border-red-800">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <p class="text-red-800 dark:text-red-200 font-medium">Error! {{ $error }}</p>
+                </div>
+            </div>
+        @endif
+
         {{--  DESKTOP TABLE --}}
         <div class="hidden md:block overflow-hidden rounded-2xl border border-gray-700 bg-gray-900 shadow-xl">
             <table class="min-w-full text-sm text-left">
-                <thead class="bg-gray-800/50 text-gray-400 uppercase text-[11px] font-bold tracking-wider">
+                <thead class="text-center bg-gray-800/50 text-gray-400 uppercase text-[11px] font-bold tracking-wider">
                     <tr>
                         <th class="px-6 py-4">Jenis & Tahun Ajaran</th>
                         <th class="px-6 py-4">Nominal Tagihan</th>
@@ -53,7 +76,7 @@
                         <th class="px-6 py-4 text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-800">
+                <tbody class="divide-y divide-gray-800 text-center">
                     @forelse ($data as $item)
                         <tr class="hover:bg-gray-800/40 transition-colors group">
                             <td class="px-6 py-4">
@@ -64,11 +87,11 @@
                                 Rp {{ number_format($item->nominal, 0, ',', '.') }}
                             </td>
                             <td class="px-6 py-4 text-gray-400">
-                                <div class="flex items-center gap-2">
-                                    <span>{{ \Carbon\Carbon::parse($item->tgl_tagihan)->format('d M Y') }}</span>
+                                <div class="flex items-center justify-center gap-1">
+                                    <span>{{ \Carbon\Carbon::parse($item->tgl_tagihan)->format('d F Y') }}</span>
                                     <span class="text-gray-600">→</span>
                                     <span
-                                        class="text-rose-400/80">{{ \Carbon\Carbon::parse($item->jatuh_tempo)->format('d M Y') }}</span>
+                                        class="text-rose-400/80">{{ \Carbon\Carbon::parse($item->jatuh_tempo)->format('d F Y') }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-center">
@@ -86,6 +109,35 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex justify-end items-center gap-2">
+                                    {{-- Tombol Status Tagihan --}}
+                                    @if ($item->status === 'Buka')
+                                        <form action="{{ route('admin.tagihan.toggle-status', $item->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/10 text-red-400 hover:bg-red-600 hover:text-white transition-all text-xs font-semibold">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                                </svg>
+                                                Tutup
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('admin.tagihan.toggle-status', $item->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-600/10 text-green-400 hover:bg-green-600 hover:text-white transition-all text-xs font-semibold">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                                </svg>
+                                                Buka
+                                            </button>
+                                        </form>
+                                    @endif
+
                                     {{-- Tombol Buat Tagihan --}}
                                     <button type="button" onclick="openAksesModal('{{ $item->id }}')"
                                         class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600/10 text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all text-xs font-semibold ">
@@ -94,7 +146,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 4v16m8-8H4" />
                                         </svg>
-                                        Buat Tagihan
+                                        Tagihan
                                     </button>
 
                                     {{-- Tombol Hapus --}}
@@ -407,7 +459,7 @@
                         Proses Buat Tagihan
                     </button>
 
-                    <div class="space-y-3">
+                    {{-- <div class="space-y-3">
                         <p class="text-[10px] text-center text-gray-500 uppercase font-bold tracking-widest">Atur Status
                             Tagihan:</p>
                         <div class="grid grid-cols-2 gap-3">
@@ -420,7 +472,7 @@
                                 Tutup Tagihan
                             </button>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </form>
         </div>

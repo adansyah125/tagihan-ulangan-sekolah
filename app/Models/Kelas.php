@@ -22,4 +22,14 @@ class Kelas extends Model
     {
         return $this->hasMany(Tagihan::class);
     }
+
+    public function tagihanDetail()
+    {
+        return $this->hasMany(TagihanDetail::class);
+    }
+
+    public function pembayaran()
+    {
+        return $this->hasMany(Pembayaran::class);
+    }
 }

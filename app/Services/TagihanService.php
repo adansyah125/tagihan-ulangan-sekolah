@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Tagihan;
-use App\Models\TagihanDetail;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Tagihan;
+use App\Models\Pembayaran;
+use Illuminate\Support\Str;
+use App\Models\TagihanDetail;
 use Illuminate\Support\Facades\DB;
 
 class TagihanService
@@ -12,27 +15,6 @@ class TagihanService
 
     public function storeUTS(array $data): void
     {
-        // DB::transaction(function () use ($data) {
-
-        //     // 🔎 Ambil hanya user dengan role siswa
-        //     $siswas = User::where('role', 'siswa')
-        //         ->select('id')
-        //         ->get();
-
-        //     if ($siswas->isEmpty()) {
-        //         throw new \DomainException('Tidak ada data siswa.');
-        //     }
-
-        //     // ❌ Cegah tagihan UTS dobel
-        //     $exists = Tagihan::where('jenis_tagihan', 'UTS')
-        //         ->where('tahun_ajaran', $data['tahun_ajaran'])
-        //         ->exists();
-
-        //     if ($exists) {
-        //         throw new \DomainException(
-        //             'Tagihan UTS untuk tahun ajaran ini sudah dibuka.'
-        //         );
-        //     }
         Tagihan::create([
             'tahun_ajaran' => $data['tahun_ajaran'],
             'jenis_tagihan' => $data['jenis_tagihan'],
@@ -42,28 +24,6 @@ class TagihanService
             'akses' => 'siswa',
             'status' => 'Tutup'
         ]);
-
-        // 🧾 Buat tagihan untuk seluruh siswa
-        // foreach ($siswas as $siswa) {
-        //     $tagihan = Tagihan::where('jenis_tagihan', 'UTS')->select('id')->first();
-        //     TagihanDetail::create([
-        //         'user_id' => $siswa->id, // siswa penerima tagihan
-        //         'tagihan_id' => $tagihan->id,
-        //         'kd_tagihan'  => str()->random(12),
-        //         'jenis_tagihan' => 'UTS',
-        //         'nominal' => $data['nominal'],
-        //         'tahun_ajaran' => $data['tahun_ajaran'],
-        //         'tgl_tagihan' => $data['tgl_tagihan'],
-        //         'jatuh_tempo' => $data['jatuh_tempo'],
-        //         'status' => 'belum lunas',
-        //     ]);
-        // }
-        // });
-
-        // buat tagihan untuk per kelas dari tabel user
-
-        // buat tagihan untuk per siswa
-
     }
 
 
@@ -132,6 +92,42 @@ class TagihanService
                     'tgl_tagihan'  => $data['tgl_tagihan'],
                     'jatuh_tempo'  => $data['jatuh_tempo'],
                     'status'       => 'belum lunas',
+                ]);
+            }
+        });
+    }
+
+    public function updatePembayaran(TagihanDetail $tagihan): void
+    {
+        DB::transaction(function () use ($tagihan) {
+
+            if ($tagihan->status === 'lunas') {
+
+                // 🔴 BALIK KE BELUM LUNAS
+                $tagihan->update([
+                    'status' => 'belum lunas'
+                ]);
+
+                // Hapus data pembayaran
+                Pembayaran::where('tagihan_id', $tagihan->id)
+                    ->where('user_id', $tagihan->user_id)
+                    ->delete();
+            } else {
+
+                // 🟢 JADI LUNAS
+                $tagihan->update([
+                    'status' => 'lunas'
+                ]);
+
+                // Simpan pembayaran
+                Pembayaran::create([
+                    'user_id'           => $tagihan->user_id,
+                    'tagihan_id'        => $tagihan->id,
+                    'kd_pembayaran'     => 'PAY-' . strtoupper(Str::random(8)),
+                    'jenis_tagihan'     => $tagihan->jenis_tagihan,
+                    'tgl_bayar'         => now(),
+                    'jumlah_bayar'      => $tagihan->nominal,
+                    'status_pembayaran' => 'lunas',
                 ]);
             }
         });

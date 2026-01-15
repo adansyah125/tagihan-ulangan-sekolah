@@ -5,41 +5,25 @@
 @section('content')
     <div class="space-y-8">
 
-        {{-- HEADER --}}
-        <div class="bg-gray-900 rounded-3xl p-6 md:p-8 shadow-2xl border border-gray-800">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div class="flex items-center gap-4">
-                    <div class="p-3 bg-rose-500/10 rounded-2xl border border-rose-500/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-black text-white tracking-tight">Laporan Tagihan</h2>
-                        <p class="text-sm text-gray-500 font-medium">Monitoring siswa dengan tunggakan pembayaran</p>
-                    </div>
-                </div>
 
-                {{-- Filter Cepat --}}
-                <div class="flex flex-wrap gap-3">
-                    <select
-                        class="bg-gray-800 border-none rounded-xl px-4 py-2.5 text-xs font-bold text-gray-300 focus:ring-2 focus:ring-indigo-500">
-                        <option>Semua Status</option>
-                        <option>Lunas</option>
-                        <option class="text-rose-400">Belum Lunas</option>
-                    </select>
-                    <select
-                        class="bg-gray-800 border-none rounded-xl px-4 py-2.5 text-xs font-bold text-gray-300 focus:ring-2 focus:ring-indigo-500">
-                        <option>Semua Jenis</option>
-                        <option>UTS</option>
-                        <option>UAS</option>
-                    </select>
-                    <button
-                        class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2.5 rounded-xl font-bold text-white text-xs transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
-                        Terapkan
-                    </button>
+        {{-- HEADER --}}
+        <div class="bg-gray-900 rounded-3xl p-8 border border-gray-800 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl"></div>
+
+            <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
+                        <div class="p-2 bg-rose-500/10 rounded-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-rose-500" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-white tracking-tight">Laporan Tagihan</h2>
+                            <p class="text-sm text-gray-500 font-medium">Monitoring siswa dengan tunggakan pembayaran</p>
+                        </div>
                 </div>
             </div>
         </div>
@@ -56,7 +40,7 @@
                     </svg>
                 </div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Total Piutang</p>
-                <h3 class="text-2xl font-black text-indigo-400 mt-1">Rp{{ number_format($totalbelumLunas, 0, ',', '.') }}
+                <h3 class="text-2xl font-black text-white mt-1">Rp{{ number_format($totalbelumLunas, 0, ',', '.') }}
                 </h3>
             </div>
 
@@ -70,7 +54,7 @@
                     </svg>
                 </div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Sudah Lunas</p>
-                <h3 class="text-2xl font-black text-emerald-400 mt-1">{{ $Lunas }} <span
+                <h3 class="text-2xl font-black text-white mt-1">{{ $Lunas }} <span
                         class="text-xs font-medium text-gray-600 uppercase">Siswa</span></h3>
             </div>
 
@@ -83,7 +67,7 @@
                     </svg>
                 </div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Belum Lunas</p>
-                <h3 class="text-2xl font-black text-rose-400 mt-1">{{ $BelumLunas }} <span
+                <h3 class="text-2xl font-black text-white mt-1">{{ $BelumLunas }} <span
                         class="text-xs font-medium text-gray-600 uppercase">Siswa</span></h3>
             </div>
         </div>
@@ -93,35 +77,34 @@
             <table class="min-w-full">
                 <thead class="bg-gray-800/50">
                     <tr>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest">Siswa</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest text-center">
-                            Kelas</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest text-center">
+                        <th class="px-6 py-4 text-[11px]  text-gray-500 uppercase ">Siswa</th>
+                        <th class="px-6 py-4 text-[11px]  text-gray-500 uppercase  text-center">
+                            No WhatsApp</th>
+                        <th class="px-6 py-4 text-[11px]  text-gray-500 uppercase  text-center">
                             Jenis Tagihan</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest text-right">
+                        <th class="px-6 py-4 text-[11px]  text-gray-500 uppercase  text-right">
                             Nominal</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest text-center">
+                        <th class="px-6 py-4 text-[11px]  text-gray-500 uppercase  text-center">
                             Status</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-500 uppercase tracking-widest text-center">
+                        <th class="px-6 py-4 text-[11px]  text-gray-500 uppercase  text-center">
                             Tindakan</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-800">
                     @forelse ($data as $item)
                         <tr class="hover:bg-gray-800/40 transition-colors group">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-xs font-bold text-indigo-400 border border-gray-700">
-                                        {{ substr($item->user->name, 0, 1) }}
-                                    </div>
-                                    <span class="text-sm font-bold text-gray-200">{{ $item->user->name }}</span>
+                            <td class="px-6 py-4 text-center">
+                                <div class="text-sm font-bold text-gray-200">
+                                    {{ $item->user->name ?? 'N/A' }}
+                                </div>
+                                <div class="text-gray-600 text-[11px] font-medium">
+                                    {{ $item->user->kelas->kelas }}
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span
                                     class="text-xs font-semibold text-gray-400 bg-gray-800 px-2.5 py-1 rounded-lg border border-gray-700">
-                                    {{ $item->user->kelas->kelas }}
+                                    {{ $item->user->telp }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase">
@@ -144,9 +127,11 @@
                                     </span>
                                 @endif
                             </td>
+
+
+
                             <td class="px-6 py-4 text-center">
-                                <a href="https://wa.me/{{ $item->user->phone ?? '' }}?text=Halo%20{{ $item->user->name }},%20mengingatkan%20tagihan%20{{ $item->jenis_tagihan }}%20anda..."
-                                    target="_blank"
+                                <a href="{{ $item->wa_link }}" target="_blank"
                                     class="inline-flex items-center gap-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-500 hover:text-white px-4 py-2 rounded-xl text-[11px] font-black transition-all group/btn uppercase tracking-widest border border-emerald-500/20 shadow-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg"
                                         class="w-4 h-4 group-hover/btn:rotate-12 transition-transform" fill="currentColor"
@@ -193,7 +178,8 @@
                     <div class="flex justify-between items-center bg-gray-800/50 p-3 rounded-2xl mb-4">
                         <div>
                             <p class="text-[10px] font-bold text-gray-500 uppercase">{{ $item->jenis_tagihan }}</p>
-                            <p class="text-xs font-black text-white">Rp{{ number_format($item->nominal, 0, ',', '.') }}</p>
+                            <p class="text-xs font-black text-white">Rp{{ number_format($item->nominal, 0, ',', '.') }}
+                            </p>
                         </div>
                         <div class="text-right">
                             <p class="text-[10px] font-bold text-gray-500 uppercase italic">Tunggakan</p>

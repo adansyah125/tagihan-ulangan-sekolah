@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             'alamat' => 'Jl. Kebon Jeruk No. 123',
             'nama_orangtua' => 'Bapak Syahdan',
             'password' => Hash::make($nis),
+            'telp' => '085922397664'
         ]);
         // Data User Kedua
         $nis2 = 23110065;
@@ -54,6 +55,7 @@ class DatabaseSeeder extends Seeder
             'alamat' => 'Jl. Kebon Jeruk No. 123',
             'nama_orangtua' => 'Bapak Syahdan',
             'password' => Hash::make($nis2),
+            'telp' => '085750547204'
         ]);
 
         // Data User Kedua
@@ -62,6 +64,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'staf@gmail.com',
             'password' => Hash::make('password123'),
             'role' => 'staf',
+            'telp' => '0895364519064'
         ]);
     }
 }

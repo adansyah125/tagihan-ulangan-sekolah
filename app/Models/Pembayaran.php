@@ -20,11 +20,21 @@ class Pembayaran extends Model
 
     public function tagihan()
     {
-        return $this->belongsTo(TagihanDetail::class);
+        return $this->belongsTo(Tagihan::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function tagihanDetail()
+    {
+        return $this->belongsTo(TagihanDetail::class);
+    }
+
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
     }
 }

@@ -7,8 +7,9 @@ use Midtrans\Config;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
 use App\Models\TagihanDetail;
-use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Services\MidtransService;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -20,7 +21,6 @@ class PaymentController extends Controller
     }
 
     protected MidtransService $midtrans_service;
-
 
     public function __construct(MidtransService $midtrans_service)
     {
@@ -49,5 +49,17 @@ class PaymentController extends Controller
         return response()->json([
             'message' => 'Status diperbarui menjadi lunas'
         ]);
+    }
+
+    public function cetak($kd_tagihan)
+    {
+        $tagihan = TagihanDetail::with(['user', 'kelas'])
+            ->where('kd_tagihan', $kd_tagihan)
+            ->firstOrFail();
+
+        $pdf = Pdf::loadView('pdf.bukti-pembayaran', compact('tagihan'))
+            ->setPaper('A4', 'portrait');
+
+        return $pdf->stream('Bukti-Pembayaran-' . $kd_tagihan . '.pdf');
     }
 }

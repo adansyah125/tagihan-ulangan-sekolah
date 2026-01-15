@@ -24,6 +24,7 @@ Route::middleware(['auth', 'siswa'])->group(function () {
     Route::get('/payment/{kd_tagihan}', [PaymentController::class, 'show'])->name('payment');
     Route::post('payment/detail/{kd_tagihan}/bayar', [PaymentController::class, 'bayar'])->name('detail.bayar');
     Route::post('/payment/{kd_tagihan}/lunas', [PaymentController::class, 'markAsLunas'])->name('spp.markAsLunas');
+    Route::get('/cetak/{kd_tagihan}', [PaymentController::class, 'cetak'])->name('cetak');
 });
 
 Route::middleware(['auth', 'staf'])->group(function () {
@@ -39,15 +40,18 @@ Route::middleware(['auth', 'staf'])->group(function () {
     Route::get('/admin/tagihan/uts', [TagihanController::class, 'indexUTS'])->name('admin.tagihan.uts');
     Route::post('/admin/tagihan/uts', [TagihanController::class, 'storeUTS'])->name('admin.tagihan.uts.store');
     Route::delete('/admin/tagihan/uts/{id}/destroy', [TagihanController::class, 'destroy'])->name('tagihan.destroy');
-    Route::post('/admin/tagihan/uts/akses/{id}', [TagihanController::class, 'updateAkses'])->name('admin.tagihan.uts.aktif');
+    Route::post('/admin/tagihan/uts/akses/{id}', [TagihanController::class, 'buatDetailTagihan'])->name('admin.tagihan.uts.aktif');
+    Route::post('/admin/tagihan/{tagihan}/toggle-status', [TagihanController::class, 'toggleStatus'])->name('admin.tagihan.toggle-status');
 
     // monitor pembayaran
     Route::get('/admin/tagihan/monitor', [TagihanController::class, 'monitor'])->name('admin.tagihan.monitor');
+    Route::post('/admin/tagihan/monitor/{tagihan}/update', [TagihanController::class, 'updateBayar'])->name('admin.tagihan.monitor.update');
 
 
     // laporan
     Route::get('/admin/laporan/keuangan', [LaporanController::class, 'indexKeuangan'])->name('admin.laporan.keuangan');
     Route::get('/admin/laporan/tagihan', [LaporanController::class, 'indexLaporan'])->name('admin.laporan.tagihan');
+    Route::get('/admin/laporan/cetak/{id}', [LaporanController::class, 'cetak'])->name('admin.laporan.cetak');
 });
 Route::get('/test-email', function () {
     $detail = App\Models\TagihanDetail::first();

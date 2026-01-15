@@ -32,71 +32,92 @@
 
 </head>
 
-<body class="min-h-screen bg-zinc-400">
-    <div class="flex h-screen">
-        <!-- Login Form -->
-        <div class="w-full md:w-1/2 bg-white flex flex-col justify-center items-center p-8">
-            <div class="text-center mb-10">
-                <div class="flex justify-center mb-2">
-                    {{-- <div class="bg-green-400 w-4 h-4 rounded-sm"></div>
-                    <div class="bg-zinc-400 mt-2 w-4 h-4 rounded-sm -ml-2"></div> --}}
-                    <img src="{{ asset('dharma_agung.jpg') }}" class=" h-25" alt="">
-                </div>
-                <h1 class="text-1xl font-bold text-red-700">SISTEM TAGIHAN SEKOLAH</h1>
-            </div>
+<body
+    class="min-h-screen bg-gradient-to-br from-pink-100 via-orange-100 to-red-100 flex items-center justify-center px-4">
 
-            <div class="w-full max-w-sm">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Login Staff Admin</h2>
-                @if (session('error'))
-                    <div class="bg-red-100 text-red-700 px-4 py-2 rounded mb-4 text-sm">
-                        {{ session('error') }}
-                    </div>
-                @endif
-                <form action="{{ route('PostLoginStaf') }}" method="POST" class="space-y-4">
-                    @csrf
-                    <div>
-                        <label for="email" class="block text-sm text-gray-700">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Email"
-                            class="mt-1 w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-                    </div>
-                    <div class="relative">
-                        <label for="password" class="block text-sm text-gray-700">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Password"
-                            class="mt-1 w-full px-4 py-2 pr-10 rounded-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+    <!-- CARD -->
+    <div class="w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
 
-                        <!-- Ikon Feather (mata) -->
-                        <button type="button" onclick="togglePassword()"
-                            class="absolute right-3 top-9 text-gray-600 text-xl focus:outline-none">
-                            <i id="toggleIcon" data-feather="eye" class="w-5 h-5"></i>
-                        </button>
+        <!-- LEFT PANEL -->
+        <div
+            class="relative hidden md:flex flex-col items-center justify-center text-center 
+           bg-gradient-to-br from-pink-500 via-orange-500 to-red-500 px-10">
 
-                        {{-- <div class="text-right mt-1">
-                            <a href="#" class="text-sm text-blue-700 hover:underline">Lupa Password?</a>
-                        </div> --}}
-                    </div>
-                    <div>
-                        <button type="submit"
-                            class="block text-center btn w-full bg-blue-900 text-white py-2 rounded-md hover:bg-blue-800 transition">
-                            Login</button>
-                        {{-- <button type="submit"
-                            class="w-full bg-blue-900 text-white py-2 rounded-md hover:bg-blue-800 transition">Sign
-                            in</button> --}}
-                    </div>
-                </form>
-            </div>
+            <h2 class="text-white text-3xl font-semibold leading-tight max-w-md">
+                Selamat Datang di
+                <span class="block font-bold">
+                    Sistem Tagihan Ulangan
+                </span>
+                <span class="block text-2xl font-medium mt-1">
+                    Sekolah Dharma Agung Bandung
+                </span>
+            </h2>
+
+            <!-- Decorative -->
+            <div class="absolute top-10 left-10 w-32 h-32 bg-white/20 rounded-full"></div>
+            <div class="absolute bottom-10 right-10 w-40 h-40 bg-white/10 rounded-full"></div>
         </div>
 
-        <!-- Image -->
-        <div class="hidden md:block w-1/2 h-full">
-            <img src="{{ asset('abu.jpg') }}" alt="Login Illustration"
-                class="object-cover h-[600px] m-auto w-[500px] mt-10 rounded-3xl shadow-2xl opacity-80 ">
+        <!-- RIGHT PANEL -->
+        <div class="p-8 md:p-12 flex flex-col justify-center">
+
+            <!-- LOGO -->
+            <div class="text-center mb-8">
+                <img src="{{ asset('dharma_agung.jpg') }}" class="h-20 mx-auto mb-3" alt="">
+                <h1 class="text-sm font-bold text-red-700 tracking-wide">
+                    SISTEM TAGIHAN SEKOLAH
+                </h1>
+            </div>
+
+            <h2 class="text-md font-semibold  text-gray-900 text-center">
+                Portal Staf Administrasi
+            </h2>
+            <h2 class="text-sm italic  text-gray-500 mb-6 text-center">
+                Silahkan masuk terlebih dahulu
+            </h2>
+
+            {{-- NOTIFIKASI --}}
+            @if (session('error'))
+                <div class="bg-red-100 text-red-700 px-4 py-2 rounded mb-4 text-sm text-center">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <!-- FORM (FUNGSI TETAP) -->
+            <form action="{{ route('PostLoginStaf') }}" method="POST" class="space-y-5">
+                @csrf
+
+                <!-- EMAIL -->
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Email</label>
+                    <input type="email" name="email" required
+                        class="w-full border-b border-gray-300 focus:border-pink-500 outline-none py-2 text-sm">
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="relative">
+                    <label class="block text-sm text-gray-600 mb-1">Password</label>
+                    <input type="password" id="password" name="password" required
+                        class="w-full border-b border-gray-300 focus:border-pink-500 outline-none py-2 pr-10 text-sm">
+
+                    <button type="button" onclick="togglePassword()" class="absolute right-2 top-8 text-gray-500">
+                        <i id="toggleIcon" data-feather="eye" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- BUTTON -->
+                <button type="submit"
+                    class="w-full bg-orange-500 text-white py-2 rounded-md font-medium hover:opacity-90 transition">
+                    Masuk
+                </button>
+            </form>
         </div>
     </div>
 
     <script>
         feather.replace();
     </script>
-
 </body>
+
 
 </html>

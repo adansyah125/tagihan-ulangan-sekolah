@@ -11,9 +11,15 @@ use App\Models\Kelas;
 
 class SiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data = User::latest()->where('role', 'siswa')->get();
+        $search = $request->search;
+        $data = User::latest()->where('role', 'siswa')
+            ->when($search, function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                    ->orWhere('nis', 'like', "%$search%");
+            })
+            ->paginate(10);
         $kelas = Kelas::all();
         return view('admin.siswa', compact('data', 'kelas'));
     }

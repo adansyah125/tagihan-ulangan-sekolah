@@ -11,7 +11,7 @@
 
             <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-2xl md:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
+                    <h2 class="text-2xl md:text-3xl font-black text-white flex items-center gap-3 ">
                         <div class="p-2 bg-indigo-600 rounded-xl">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -22,11 +22,11 @@
                         Laporan Keuangan
                     </h2>
                     <p class="text-sm text-gray-500 mt-2 font-medium italic">
-                        Rekapitulasi pembayaran UTS & UAS periode berjalan
+                        Rekapitulasi pembayaran Yang sudah dibayar
                     </p>
                 </div>
 
-                <button
+                {{-- <button
                     class="flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-300 px-6 py-3 rounded-2xl font-bold text-sm transition-all border border-gray-700 shadow-lg">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
@@ -34,7 +34,7 @@
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     Export PDF
-                </button>
+                </button> --}}
             </div>
         </div>
 
@@ -73,18 +73,17 @@
             @foreach ($stats as $stat)
                 <div
                     class="bg-gray-900 border border-gray-800 rounded-3xl p-6 shadow-xl group hover:border-{{ $stat['color'] }}-500/50 transition-all duration-300">
-                    <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-1 mb-4">
                         <div class="p-2 bg-{{ $stat['color'] }}-500/10 rounded-lg text-{{ $stat['color'] }}-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="{{ $stat['icon'] }}" />
                             </svg>
                         </div>
-                        <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest leading-none">Live
-                            Data</span>
+                        <span class="text-[10px] font-bold text-gray-600 uppercase tracking-widest leading-none"></span>
+                        <p class="text-md font-bold text-gray-500 tracking-tight">{{ $stat['label'] }}</p>
                     </div>
-                    <p class="text-xs font-bold text-gray-500 uppercase tracking-tight">{{ $stat['label'] }}</p>
-                    <h3 class="text-xl font-black text-white mt-1">
+                    <h3 class="text-xl font-semibold text-white mt-1">
                         {{ is_numeric($stat['value']) ? 'Rp ' . number_format($stat['value'], 0, ',', '.') : $stat['value'] . ' Siswa' }}
                     </h3>
                 </div>
@@ -96,17 +95,23 @@
             <form method="GET" class="flex flex-col md:flex-row gap-4">
                 <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <select name="jenis"
-                        class="bg-gray-800 border-none rounded-2xl px-5 py-3 text-sm text-gray-300 focus:ring-2 focus:ring-indigo-500 transition-all">
+                        class="bg-gray-800 border-none rounded-2xl px-5 py-3 text-sm text-gray-300 focus:ring-2 focus:ring-indigo-500">
                         <option value="">Semua Jenis Tagihan</option>
-                        <option>UTS</option>
-                        <option>UAS</option>
+                        <option value="UTS" {{ request('jenis') == 'UTS' ? 'selected' : '' }}>UTS</option>
+                        <option value="UAS" {{ request('jenis') == 'UAS' ? 'selected' : '' }}>UAS</option>
+                        <option value="Harian" {{ request('jenis') == 'Harian' ? 'selected' : '' }}>Harian</option>
                     </select>
 
-                    <select name="tahun"
-                        class="bg-gray-800 border-none rounded-2xl px-5 py-3 text-sm text-gray-300 focus:ring-2 focus:ring-indigo-500 transition-all">
-                        <option>2024 / 2025</option>
-                        <option>2023 / 2024</option>
+                    <select name="user_id"
+                        class="bg-gray-800 border-none rounded-2xl px-5 py-3 text-sm text-gray-300 focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Semua Siswa</option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
+                                {{ $user->name }}
+                            </option>
+                        @endforeach
                     </select>
+
                 </div>
 
                 <button type="submit"
@@ -118,17 +123,17 @@
 
         {{-- DESKTOP TABLE --}}
         <div class="hidden md:block bg-gray-900 rounded-3xl border border-gray-800 shadow-2xl overflow-hidden">
-            <table class="min-w-full text-left">
-                <thead class="bg-gray-800/50">
+            <table class="min-w-full text-left text-sm">
+                <thead class="bg-gray-800/50 uppercase">
                     <tr>
-                        <th class="px-6 py-4 text-[11px] font-black text-gray-500 uppercase tracking-widest">Waktu Bayar
+                        <th class="px-6 py-4 text-[11px] text-gray-500">Waktu Bayar
                         </th>
-                        <th class="px-6 py-4 text-[11px] font-black text-gray-500 uppercase tracking-widest">Detail
+                        <th class="px-6 py-4 text-[11px] text-gray-500">Detail
                             Transaksi</th>
-                        <th class="px-6 py-4 text-[11px] font-black text-gray-500 uppercase tracking-widest">Siswa</th>
-                        <th class="px-6 py-4 text-[11px] font-black text-gray-500 uppercase tracking-widest text-right">
+                        <th class="px-6 py-4 text-[11px] text-gray-500">Siswa</th>
+                        <th class="px-6 py-4 text-[11px] text-gray-500 text-center">
                             Nominal</th>
-                        <th class="px-6 py-4 text-[11px] font-black text-gray-500 uppercase tracking-widest text-center">
+                        <th class="px-6 py-4 text-[11px] text-gray-500 text-center">
                             Opsi</th>
                     </tr>
                 </thead>
@@ -139,26 +144,33 @@
                                 <div class="text-sm font-bold text-gray-200">
                                     {{ \Carbon\Carbon::parse($item->tgl_bayar)->format('d M Y') }}</div>
                                 <div class="text-[10px] text-gray-600 font-medium">
-                                    {{ \Carbon\Carbon::parse($item->tgl_bayar)->format('H:i') }} WIB</div>
+                                    {{ \Carbon\Carbon::parse($item->tgl_bayar)->timezone('Asia/Jakarta')->format('H:i') }}
+                                    WIB</div>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex flex-col">
                                     <span
-                                        class="text-xs font-bold text-indigo-400 leading-none mb-1">{{ $item->tagihan->kd_tagihan }}</span>
+                                        class="text-xs font-bold text-indigo-400 leading-none mb-1">{{ $item->kd_pembayaran }}</span>
                                     <span
-                                        class="text-[11px] text-gray-500 font-medium uppercase tracking-tighter">{{ $item->tagihan->jenis_tagihan }}</span>
+                                        class="text-[11px] text-gray-500 font-medium uppercase tracking-tighter">{{ $item->jenis_tagihan }}</span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 font-bold text-gray-300 text-sm">
-                                {{ $item->user->name ?? 'N/A' }}
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-bold text-gray-200">
+                                    {{ $item->user->name ?? 'N/A' }}
+                                </div>
+                                <div class="text-gray-600 text-[11px] font-medium">
+                                    {{ $item->user->kelas->kelas }}
+                                </div>
                             </td>
-                            <td class="px-6 py-4 text-right">
+                            <td class="px-6 py-4 text-center">
+
                                 <span class="text-sm font-black text-emerald-400">Rp
                                     {{ number_format($item->jumlah_bayar, 0, ',', '.') }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex justify-center gap-2">
-                                    <a href="#"
+                                    <a href="{{ route('admin.laporan.cetak', $item->kd_pembayaran) }}" target="_blank"
                                         class="p-2 rounded-xl bg-gray-800 text-gray-400 hover:bg-rose-500/10 hover:text-rose-400 transition-all border border-gray-700"
                                         title="Cetak Struk">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,7 +200,7 @@
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <span
-                                class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{{ $item->tagihan->jenis_tagihan }}</span>
+                                class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{{ $item->jenis_tagihan }}</span>
                             <h4 class="text-sm font-bold text-white">{{ $item->user->name ?? 'N/A' }}</h4>
                         </div>
                         <div class="text-right">

@@ -4,12 +4,13 @@
     <div class="max-w-5xl mx-auto p-4 md:p-6">
         @if (session('success'))
             <div id="success-alert"
-                class="fixed top-5 right-5 z-[60] p-4 rounded-2xl bg-green-500 text-white shadow-2xl border border-green-400 animate-bounce-in transition-opacity duration-500">
+                class="p-4 rounded-lg bg-green-50 border border-green-200 mb-2 dark:bg-green-900/30 dark:border-green-800">
                 <div class="flex items-center gap-3">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <p class="font-bold">Berhasil! Data siswa telah diperbarui.</p>
+                    <p class="text-green-800 dark:text-green-200 font-medium">Berhasil! Perubahan anda telah disimpan.</p>
                 </div>
             </div>
         @endif
@@ -50,6 +51,10 @@
                             <span class="text-xs font-semibold text-gray-500 uppercase">Alamat Email</span>
                             <p class="text-white font-medium mt-1 text-lg">{{ $user->email }}</p>
                         </div>
+                        <div class="bg-gray-800/40 p-4 rounded-2xl border border-gray-800">
+                            <span class="text-xs font-semibold text-gray-500 uppercase">No WhatsApp</span>
+                            <p class="text-white font-medium mt-1 text-lg">{{ $user->telp }}</p>
+                        </div>
                     </div>
                 </section>
 
@@ -64,6 +69,7 @@
                         <h3 class="text-lg font-bold text-gray-200">Profil Akademik</h3>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                         <div class="bg-gray-800/40 p-4 rounded-2xl border border-gray-800">
                             <span class="text-xs font-semibold text-gray-500 uppercase">Nama Lengkap</span>
                             <p class="text-white font-medium mt-1 text-lg">{{ $user->name }}</p>
@@ -137,8 +143,8 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-sm font-semibold text-gray-400 ml-1">Nama Lengkap</label>
-                            <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                            <label class="text-sm font-semibold text-gray-400 ml-1">No WhatsApp</label>
+                            <input type="number" name="telp" value="{{ old('telp', $user->telp) }}"
                                 class="w-full bg-gray-800 border border-gray-700 rounded-2xl px-5 py-3 text-white focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
                         </div>
 
@@ -164,6 +170,12 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-gray-400 ml-1">Nama Lengkap</label>
+                        <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-2xl px-5 py-3 text-white focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all">
                     </div>
 
                     <div class="space-y-2">
@@ -231,7 +243,7 @@
             const alert = document.getElementById('success-alert');
             if (alert) {
                 alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 500);
+                setTimeout(() => alert.remove(), 300);
             }
         }, 3000);
     </script>

@@ -83,7 +83,12 @@
                 <div class="bg-red-100 text-red-700 px-4 py-2 rounded mb-4 text-sm text-center">
                     {{ session('error') }}
                 </div>
+            @elseif (session('success'))
+                <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-4 text-sm text-center">
+                    {{ session('success') }}
+                </div>
             @endif
+
 
             <!-- FORM (FUNGSI TETAP) -->
             <form action="{{ route('PostLoginSiswa') }}" method="POST" class="space-y-5">
@@ -119,13 +124,14 @@
                     class="w-full  bg-orange-500 text-white py-2 rounded-md font-medium hover:opacity-90 transition cursor-pointer">
                     Masuk
                 </button>
-                {{-- <div class="text-center">
-                    <p class="text-sm text-gray-600">Anda belum memiliki akun? <a href=""
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">Anda belum memiliki akun? <a href="{{ route('register') }}"
                             class="text-pink-600 hover:underline">Daftar</a></p>
-                </div> --}}
+                </div>
             </form>
         </div>
     </div>
+
 
     <script>
         feather.replace();

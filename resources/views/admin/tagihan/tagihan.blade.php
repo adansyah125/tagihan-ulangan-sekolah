@@ -281,10 +281,12 @@
 
                 <div class="space-y-1">
                     <label class="text-xs font-semibold text-gray-500 ml-1 uppercase">Tahun Ajaran</label>
-                    <input type="text" name="tahun_ajaran" required
+                    <input type="text" name="tahun_ajaran" required id="tahun_ajaran"
                         class="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white
                     focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition placeholder:text-gray-600"
                         placeholder="Contoh: 2024/2025">
+                    <p id="error_msg" class="text-red-500 text-xs mt-1 hidden italic">Format tahun tidak valid (Contoh:
+                        2024/2025)</p>
                 </div>
 
                 <div class="space-y-1">
@@ -550,6 +552,59 @@
                 divKelas.classList.remove('hidden');
             }
             // Jika 'semua', biarkan keduanya tetap tersembunyi
+        }
+    </script>
+    <script>
+        // format inputan tahun ajaran
+        const inputTahun = document.getElementById('tahun_ajaran');
+        const errorMsg = document.getElementById('error_msg');
+
+        inputTahun.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Ambil angka saja
+            let formatted = "";
+
+            // Auto-format YYYY/YYYY
+            if (value.length > 0) {
+                formatted = value.substring(0, 4);
+                if (value.length > 4) {
+                    formatted += '/' + value.substring(4, 8);
+                }
+            }
+            e.target.value = formatted;
+
+            // VALIDASI VISUAL
+            // Jika input sudah lengkap (9 karakter), cek validitasnya
+            if (formatted.length === 9) {
+                const parts = formatted.split('/');
+                const tahunAwal = parseInt(parts[0]);
+                const tahunAkhir = parseInt(parts[1]);
+
+                // Cek apakah tahun akhir harus lebih besar dari tahun awal
+                if (tahunAkhir <= tahunAwal) {
+                    showError(true, "Tahun akhir harus lebih besar dari tahun awal");
+                } else {
+                    showError(false);
+                }
+            } else if (formatted.length > 0 && formatted.length < 9) {
+                // Jika sedang mengetik tapi belum selesai
+                showError(true, "Format belum lengkap (Contoh: 2024/2025)");
+            } else {
+                showError(false);
+            }
+        });
+
+        // Fungsi untuk bongkar pasang class error
+        function showError(isError, message = "") {
+            if (isError) {
+                inputTahun.classList.add('border-red-500', 'focus:ring-red-500');
+                inputTahun.classList.remove('border-gray-700', 'focus:ring-indigo-500');
+                errorMsg.textContent = message;
+                errorMsg.classList.remove('hidden');
+            } else {
+                inputTahun.classList.remove('border-red-500', 'focus:ring-red-500');
+                inputTahun.classList.add('border-gray-700', 'focus:ring-indigo-500');
+                errorMsg.classList.add('hidden');
+            }
         }
     </script>
 @endsection

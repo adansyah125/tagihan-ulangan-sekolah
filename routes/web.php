@@ -10,6 +10,9 @@ use App\Http\Controllers\TagihanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
+
+Route::get('/login/siswa/register', [AuthController::class, 'regis'])->name('register');
+Route::post('/login/siswa/register', [AuthController::class, 'PostRegis'])->name('PostRegisterSiswa');
 Route::get('/login/siswa', [AuthController::class, 'indexSiswa'])->name('log_siswa')->middleware('guest.login:siswa');
 Route::post('/login/siswa', [AuthController::class, 'logSiswa'])->name('PostLoginSiswa');
 Route::post('/logout', [AuthController::class, 'logoutSiswa'])->name('logout');

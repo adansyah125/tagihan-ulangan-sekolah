@@ -5,7 +5,6 @@
 @section('content')
     <div class="bg-gray-800/60 backdrop-blur-xl text-gray-100 rounded-2xl p-6 shadow-2xl border border-gray-700">
         {{-- Header --}}
-
         <div
             class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4 bg-gray-800/20 p-4 rounded-2xl border border-gray-700/50 backdrop-blur-md">
 
@@ -261,8 +260,6 @@
                 </div>
             @endforelse
         </div>
-
-
     </div>
 
     <!-- MODAL -->
